@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
-import { TimeSeries, TimeSeriesDatum } from './types';
+import { TimeSeries } from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
@@ -12,19 +12,8 @@ type LineChartProps = {
   series: TimeSeries[];
   width?: string | number;
   height?: string | number;
-  options?: {
-    marginTop?: number;
-    marginLeft?: number;
-    marginRight?: number;
-    marginBottom?: number;
-  };
 };
-function LineChart({
-  series,
-  width = '100%',
-  height = 200,
-  options = {},
-}: LineChartProps) {
+function LineChart({ series, width = '100%', height = 200 }: LineChartProps) {
   const [state, setState] = useImmer({
     width: 0,
     height: 0,
@@ -37,10 +26,10 @@ function LineChart({
       dr.width = Math.round(layout.width);
       dr.height = Math.round(layout.height);
 
-      const marginTop = options.marginTop ?? 10;
-      const marginLeft = options.marginLeft ?? 10;
-      const marginRight = options.marginRight ?? 10;
-      const marginBottom = options.marginBottom ?? 10;
+      const marginTop = 10;
+      const marginLeft = 10;
+      const marginRight = 10;
+      const marginBottom = 10;
 
       dr.paneBoundary = new PaneBoundary({
         x1: marginLeft + Y_AXIS_WIDTH,
@@ -57,7 +46,7 @@ function LineChart({
     !xScale || !yScale
       ? null
       : d3
-          .line<TimeSeriesDatum>()
+          .line<TimeSeries['data'][0]>()
           .defined(dt => !isNaN(dt.value))
           .x(dt => xScale(dt.date))
           .y(dt => yScale(dt.value));

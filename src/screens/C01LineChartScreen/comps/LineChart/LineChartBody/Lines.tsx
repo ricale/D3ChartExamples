@@ -1,9 +1,9 @@
 import { G, Path } from 'react-native-svg';
-import { TimeSeries, TimeSeriesDatum } from '../types';
+import { TimeSeries } from '../types';
 
 type LinesProps = {
   series: TimeSeries[];
-  lineFunc: d3.Line<TimeSeriesDatum>;
+  lineFunc: d3.Line<TimeSeries['data'][0]>;
 };
 function Lines({ series, lineFunc }: LinesProps) {
   return (

@@ -8,17 +8,15 @@ type XAxisProps = {
   scale: d3.ScaleTime<number, number, never>;
   x?: number;
   y?: number;
-  x1?: number;
-  x2?: number;
 };
-function XAxis({ scale, x = 0, y = 0, x1, x2 }: XAxisProps) {
+function XAxis({ scale, x = 0, y = 0 }: XAxisProps) {
   const range = scale.range();
   const ticks = scale.ticks();
   return (
     <G>
       <Line
-        x1={x1 ?? range[0] + x}
-        x2={x2 ?? range[1] + x}
+        x1={range[0] + x}
+        x2={range[1] + x}
         y1={y}
         y2={y}
         stroke="black"

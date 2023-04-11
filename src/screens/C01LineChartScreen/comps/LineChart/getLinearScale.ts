@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { TimeSeries, TimeSeriesDatum } from './types';
+import { TimeSeries } from './types';
 
 function getLinearScale(series: TimeSeries[], range: [number, number]) {
   if (!series?.length) {
@@ -11,13 +11,14 @@ function getLinearScale(series: TimeSeries[], range: [number, number]) {
 
   const allData = series.reduce(
     (acc, sr) => [...acc, ...sr.data],
-    [] as TimeSeriesDatum[]
+    [] as TimeSeries['data']
   );
   if (!allData.length) {
     return null;
   }
 
   const domain = d3.extent(allData, dt => dt.value) as [number, number];
+
   const offsetDelta = 0.2;
   const offset = (domain[1] - domain[0]) * offsetDelta;
   domain[0] -= offset;

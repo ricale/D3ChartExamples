@@ -1,17 +1,47 @@
 import * as d3 from 'd3';
 import { G, Line, Text } from 'react-native-svg';
-import dateFormat from '../../../../../utils/dateFormat';
 
-const TICK_HEIGHT = 6;
+import dateFormat from 'utils/dateFormat';
 
-type XAxisProps = {
+import { TimeAxisOptions } from '../types';
+
+const DEFAULT_TICK_HEIGHT = 6;
+
+type XAxisProps = TimeAxisOptions & {
   scale: d3.ScaleTime<number, number, never>;
-  x?: number;
-  y?: number;
 };
-function XAxis({ scale, x = 0, y = 0 }: XAxisProps) {
+function XAxis({
+  scale,
+  x = 0,
+  y = 0,
+
+  enabled = true,
+
+  lineColor = 'black',
+  lineWidth = 1,
+
+  showTicks = true,
+  ticks: _ticks,
+
+  tickLength = DEFAULT_TICK_HEIGHT,
+  tickWidth = 1,
+  tickColor = 'black',
+
+  tickLabelSize,
+  tickLabelFont,
+  tickLabelColor = 'black',
+  tickLabelFormatter = dateFormat,
+}: XAxisProps) {
   const range = scale.range();
-  const ticks = scale.ticks();
+  const ticks = !_ticks
+    ? scale.ticks()
+    : typeof _ticks === 'function'
+    ? _ticks(scale)
+    : _ticks;
+
+  if (!enabled) {
+    return null;
+  }
   return (
     <G>
       <Line
@@ -19,31 +49,39 @@ function XAxis({ scale, x = 0, y = 0 }: XAxisProps) {
         x2={range[1] + x}
         y1={y}
         y2={y}
-        stroke="black"
-        strokeWidth={1}
+        stroke={lineColor}
+        strokeWidth={lineWidth}
       />
-      {ticks.map(tick => (
-        <Line
-          key={`${tick}`}
-          x1={scale(tick)}
-          x2={scale(tick)}
-          y1={y}
-          y2={y + TICK_HEIGHT}
-          stroke="black"
-        />
-      ))}
-      {ticks.map(tick => (
-        <Text
-          key={`${tick}`}
-          x={scale(tick)}
-          y={y + TICK_HEIGHT + 2}
-          fill="black"
-          textAnchor="middle"
-          alignmentBaseline="hanging"
-        >
-          {`${dateFormat(tick)}`}
-        </Text>
-      ))}
+
+      {showTicks && (
+        <>
+          {ticks.map(tick => (
+            <Line
+              key={`${tick}`}
+              x1={scale(tick)}
+              x2={scale(tick)}
+              y1={y}
+              y2={y + tickLength}
+              stroke={tickColor}
+              strokeWidth={tickWidth}
+            />
+          ))}
+          {ticks.map(tick => (
+            <Text
+              key={`${tick}`}
+              x={scale(tick)}
+              y={y + tickLength + 2}
+              fill={tickLabelColor}
+              fontSize={tickLabelSize}
+              fontFamily={tickLabelFont}
+              textAnchor="middle"
+              alignmentBaseline="hanging"
+            >
+              {`${tickLabelFormatter(tick)}`}
+            </Text>
+          ))}
+        </>
+      )}
     </G>
   );
 }

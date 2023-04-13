@@ -6,7 +6,7 @@ import {
 
 type TextProps = RNTextProps;
 
-function Text({style, ...props}: TextProps) {
+function Text({ style, ...props }: TextProps) {
   return <RNText {...props} style={[styles.container, style]} />;
 }
 

@@ -1,10 +1,11 @@
-import { StyleSheet, View } from 'react-native';
-import Button from '../../components/Button';
-import ScreenContainer from '../../components/ScreenContainer';
-import Text from '../../components/Text';
-import useNavigation from '../../navigation/useNavigation';
-import { RootStackParamsList } from '../../navigation/types';
 import { Fragment } from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import Button from 'components/Button';
+import ScreenContainer from 'components/ScreenContainer';
+import Text from 'components/Text';
+import useNavigation from 'navigation/useNavigation';
+import { RootStackParamsList } from 'navigation/types';
 
 const buttons: { title: string; screenName: keyof RootStackParamsList }[] = [
   { title: 'C01 - 라인차트 기본 기능 구현', screenName: 'C01LineChart' },

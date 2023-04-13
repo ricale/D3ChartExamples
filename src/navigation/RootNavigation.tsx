@@ -1,9 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import C01LineChartScreen from '../screens/C01LineChartScreen';
-import C02LineChartWithOptionsScreen from '../screens/C02LineChartWithOptionsScreen';
-import HomeScreen from '../screens/HomeScreen';
+import C01LineChartScreen from 'screens/C01LineChartScreen';
+import C02LineChartWithOptionsScreen from 'screens/C02LineChartWithOptionsScreen';
+import HomeScreen from 'screens/HomeScreen';
 
 import { RootStackParamsList } from './types';
 

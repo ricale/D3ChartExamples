@@ -1,4 +1,5 @@
-import { ScaleTime } from 'd3';
+import { ScaleLinear, ScaleTime } from 'd3';
+import { FontWeight } from 'react-native-svg';
 
 export type TimeSeriesDatum = { date: Date; value: number };
 export type TimeSeries = {
@@ -15,7 +16,7 @@ export type AxisOptions<Scale, Value> = {
   lineWidth?: number;
 
   showTicks?: boolean;
-  ticks?: Date[] | ((scale: Scale) => Date[]);
+  ticks?: Value[] | ((scale: Scale) => Value[]);
 
   tickLength?: number;
   tickWidth?: number;
@@ -23,10 +24,15 @@ export type AxisOptions<Scale, Value> = {
 
   tickLabelSize?: number;
   tickLabelFont?: string;
+  tickLabelWeight?: FontWeight;
   tickLabelColor?: string;
   tickLabelFormatter?: (value: Value) => string;
 };
 export type TimeAxisOptions = AxisOptions<
   ScaleTime<number, number, never>,
   Date
+>;
+export type LinearAxisOptions = AxisOptions<
+  ScaleLinear<number, number, never>,
+  number
 >;

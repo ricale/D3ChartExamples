@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import PaneBoundary from 'utils/PaneBoundary';
 
-import { TimeSeries, TimeAxisOptions } from '../types';
+import { TimeSeries, TimeAxisOptions, LinearAxisOptions } from '../types';
 import XAxis from './XAxis';
 import YAxis from './YAxis';
 import Grid from './Grid';
@@ -16,6 +16,7 @@ type LineChartBodyProps = {
   paneBoundary: PaneBoundary;
 
   xAxisOptions?: TimeAxisOptions;
+  yAxisOptions?: LinearAxisOptions;
 };
 function LineChartBody({
   series,
@@ -24,11 +25,12 @@ function LineChartBody({
   lineFunc,
   paneBoundary,
   xAxisOptions,
+  yAxisOptions,
 }: LineChartBodyProps) {
   return (
     <Fragment>
       <XAxis scale={xScale} y={paneBoundary.y1} {...xAxisOptions} />
-      <YAxis scale={yScale} x={paneBoundary.x1} y={0} />
+      <YAxis scale={yScale} x={paneBoundary.x1} {...yAxisOptions} />
       <Grid yScale={yScale} x1={paneBoundary.x1} x2={paneBoundary.x2} />
       <Lines series={series} lineFunc={lineFunc} />
     </Fragment>

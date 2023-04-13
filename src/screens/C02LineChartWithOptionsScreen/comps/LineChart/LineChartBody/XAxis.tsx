@@ -5,7 +5,7 @@ import dateFormat from 'utils/dateFormat';
 
 import { TimeAxisOptions } from '../types';
 
-const DEFAULT_TICK_HEIGHT = 6;
+const DEFAULT_TICK_LENGTH = 6;
 
 type XAxisProps = TimeAxisOptions & {
   scale: d3.ScaleTime<number, number, never>;
@@ -23,12 +23,13 @@ function XAxis({
   showTicks = true,
   ticks: _ticks,
 
-  tickLength = DEFAULT_TICK_HEIGHT,
+  tickLength = DEFAULT_TICK_LENGTH,
   tickWidth = 1,
   tickColor = 'black',
 
   tickLabelSize,
   tickLabelFont,
+  tickLabelWeight,
   tickLabelColor = 'black',
   tickLabelFormatter = dateFormat,
 }: XAxisProps) {
@@ -74,10 +75,11 @@ function XAxis({
               fill={tickLabelColor}
               fontSize={tickLabelSize}
               fontFamily={tickLabelFont}
+              fontWeight={tickLabelWeight}
               textAnchor="middle"
               alignmentBaseline="hanging"
             >
-              {`${tickLabelFormatter(tick)}`}
+              {tickLabelFormatter(tick)}
             </Text>
           ))}
         </>

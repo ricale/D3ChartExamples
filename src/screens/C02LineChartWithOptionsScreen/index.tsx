@@ -26,8 +26,20 @@ function C02LineChartWithOptionsScreen() {
           tickWidth: 3,
           tickColor: 'green',
           tickLabelSize: 20,
+          tickLabelWeight: 100,
           tickLabelFormatter: date =>
             `${date.getMonth() + 1}.${date.getDate()}`,
+        }}
+        yAxis={{
+          enabled: true,
+          lineColor: 'brown',
+          lineWidth: 3,
+          tickLength: 2,
+          tickWidth: 3,
+          tickColor: 'yellow',
+          tickLabelSize: 8,
+          tickLabelWeight: 700,
+          tickLabelFormatter: val => val.toLocaleString(),
         }}
       />
     </ScreenContainer>

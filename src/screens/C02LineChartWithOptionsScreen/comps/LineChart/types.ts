@@ -1,9 +1,10 @@
 import { ScaleLinear, ScaleTime } from 'd3';
 import { FontWeight } from 'react-native-svg';
-import PaneBoundary from 'utils/PaneBoundary';
 
 export type TimeSeriesDatum = { date: Date; value: number };
 export type TimeSeries = {
+  color?: string;
+  lineWidth?: number;
   data: TimeSeriesDatum[];
 };
 
@@ -41,3 +42,8 @@ export type LinearAxisOptions = AxisOptions<
   ScaleLinear<number, number, never>,
   number
 >;
+
+export type LinesOptions = {
+  colors?: string[];
+  lineWidth?: number;
+};

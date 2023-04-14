@@ -4,7 +4,12 @@ import { useImmer } from 'use-immer';
 
 import PaneBoundary from 'utils/PaneBoundary';
 
-import { TimeSeries, TimeAxisOptions, LinearAxisOptions } from './types';
+import {
+  TimeSeries,
+  TimeAxisOptions,
+  LinearAxisOptions,
+  LinesOptions,
+} from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
@@ -14,15 +19,17 @@ type LineChartProps = {
   series: TimeSeries[];
   width?: string | number;
   height?: string | number;
-  xAxis?: TimeAxisOptions;
-  yAxis?: LinearAxisOptions;
+  xAxisOptions?: TimeAxisOptions;
+  yAxisOptions?: LinearAxisOptions;
+  linesOptions?: LinesOptions;
 };
 function LineChart({
   series,
   width = '100%',
   height = 200,
-  xAxis: xAxisOptions,
-  yAxis: yAxisOptions,
+  xAxisOptions,
+  yAxisOptions,
+  linesOptions,
 }: LineChartProps) {
   const [state, setState] = useImmer({
     width: 0,
@@ -74,6 +81,7 @@ function LineChart({
           paneBoundary={state.paneBoundary}
           xAxisOptions={xAxisOptions}
           yAxisOptions={yAxisOptions}
+          linesOptions={linesOptions}
         />
       )}
     </Svg>

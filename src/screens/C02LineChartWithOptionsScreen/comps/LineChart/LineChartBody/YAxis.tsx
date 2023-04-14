@@ -9,12 +9,12 @@ const DEFAULT_TICK_LENGTH = 6;
 
 type YAxisProps = LinearAxisOptions & {
   scale: d3.ScaleLinear<number, number, never>;
-  paneBoundary?: PaneBoundary;
+  paneBoundary: PaneBoundary;
 };
 function YAxis({
   scale,
   paneBoundary,
-  x = 0,
+  x = paneBoundary.x1,
   y = 0,
 
   enabled = true,
@@ -93,8 +93,8 @@ function YAxis({
         ticks.map(tick => (
           <Line
             key={`${tick}`}
-            x1={paneBoundary?.x1}
-            x2={paneBoundary?.x2}
+            x1={paneBoundary.x1}
+            x2={paneBoundary.x2}
             y1={scale(tick)}
             y2={scale(tick)}
             stroke={gridLineColor}

@@ -9,8 +9,8 @@ function Lines({
   series,
   lineFunc,
   colors = [
-    'skyblue',
     'blue',
+    'skyblue',
     'green',
     'brown',
     'gray',

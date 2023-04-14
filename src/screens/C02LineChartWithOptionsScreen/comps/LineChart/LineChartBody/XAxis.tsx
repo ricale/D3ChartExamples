@@ -10,13 +10,13 @@ const DEFAULT_TICK_LENGTH = 6;
 
 type XAxisProps = TimeAxisOptions & {
   scale: d3.ScaleTime<number, number, never>;
-  paneBoundary?: PaneBoundary;
+  paneBoundary: PaneBoundary;
 };
 function XAxis({
   scale,
   paneBoundary,
   x = 0,
-  y = 0,
+  y = paneBoundary.y1,
 
   enabled = true,
 
@@ -98,8 +98,8 @@ function XAxis({
             key={`${tick}`}
             x1={scale(tick)}
             x2={scale(tick)}
-            y1={paneBoundary?.y1}
-            y2={paneBoundary?.y2}
+            y1={paneBoundary.y1}
+            y2={paneBoundary.y2}
             stroke={gridLineColor}
             strokeWidth={gridLineWidth}
           />

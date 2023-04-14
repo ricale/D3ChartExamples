@@ -35,18 +35,8 @@ function LineChartBody({
 }: LineChartBodyProps) {
   return (
     <Fragment>
-      <XAxis
-        scale={xScale}
-        y={paneBoundary.y1}
-        {...xAxisOptions}
-        paneBoundary={paneBoundary}
-      />
-      <YAxis
-        scale={yScale}
-        x={paneBoundary.x1}
-        {...yAxisOptions}
-        paneBoundary={paneBoundary}
-      />
+      <XAxis scale={xScale} paneBoundary={paneBoundary} {...xAxisOptions} />
+      <YAxis scale={yScale} paneBoundary={paneBoundary} {...yAxisOptions} />
       <Lines series={series} lineFunc={lineFunc} {...linesOptions} />
     </Fragment>
   );

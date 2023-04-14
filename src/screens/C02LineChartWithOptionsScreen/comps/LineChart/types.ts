@@ -1,5 +1,6 @@
 import { ScaleLinear, ScaleTime } from 'd3';
 import { FontWeight } from 'react-native-svg';
+import PaneBoundary from 'utils/PaneBoundary';
 
 export type TimeSeriesDatum = { date: Date; value: number };
 export type TimeSeries = {
@@ -27,6 +28,10 @@ export type AxisOptions<Scale, Value> = {
   tickLabelWeight?: FontWeight;
   tickLabelColor?: string;
   tickLabelFormatter?: (value: Value) => string;
+
+  showGridLines?: boolean;
+  gridLineWidth?: number;
+  gridLineColor?: string;
 };
 export type TimeAxisOptions = AxisOptions<
   ScaleTime<number, number, never>,

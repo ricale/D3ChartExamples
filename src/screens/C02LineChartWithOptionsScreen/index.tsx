@@ -4,7 +4,7 @@ import ScreenContainer from 'components/ScreenContainer';
 import Text from 'components/Text';
 
 import LineChart from './comps/LineChart';
-import dummy from './dummy';
+import dummySeries from './dummySeries';
 
 function C02LineChartWithOptionsScreen() {
   return (
@@ -15,7 +15,7 @@ function C02LineChartWithOptionsScreen() {
       </View>
 
       <LineChart
-        series={[{ data: dummy }]}
+        series={dummySeries}
         width="100%"
         height={250}
         xAxis={{
@@ -29,6 +29,10 @@ function C02LineChartWithOptionsScreen() {
           tickLabelWeight: 100,
           tickLabelFormatter: date =>
             `${date.getMonth() + 1}.${date.getDate()}`,
+
+          showGridLines: true,
+          gridLineWidth: 2,
+          gridLineColor: 'rgba(0, 0, 0, 0.5)',
         }}
         yAxis={{
           enabled: true,
@@ -40,6 +44,8 @@ function C02LineChartWithOptionsScreen() {
           tickLabelSize: 8,
           tickLabelWeight: 700,
           tickLabelFormatter: val => val.toLocaleString(),
+
+          showGridLines: false,
         }}
       />
     </ScreenContainer>

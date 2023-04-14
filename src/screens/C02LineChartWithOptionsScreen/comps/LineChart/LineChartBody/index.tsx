@@ -5,7 +5,6 @@ import PaneBoundary from 'utils/PaneBoundary';
 import { TimeSeries, TimeAxisOptions, LinearAxisOptions } from '../types';
 import XAxis from './XAxis';
 import YAxis from './YAxis';
-import Grid from './Grid';
 import Lines from './Lines';
 
 type LineChartBodyProps = {
@@ -29,9 +28,18 @@ function LineChartBody({
 }: LineChartBodyProps) {
   return (
     <Fragment>
-      <XAxis scale={xScale} y={paneBoundary.y1} {...xAxisOptions} />
-      <YAxis scale={yScale} x={paneBoundary.x1} {...yAxisOptions} />
-      <Grid yScale={yScale} x1={paneBoundary.x1} x2={paneBoundary.x2} />
+      <XAxis
+        scale={xScale}
+        y={paneBoundary.y1}
+        {...xAxisOptions}
+        paneBoundary={paneBoundary}
+      />
+      <YAxis
+        scale={yScale}
+        x={paneBoundary.x1}
+        {...yAxisOptions}
+        paneBoundary={paneBoundary}
+      />
       <Lines series={series} lineFunc={lineFunc} />
     </Fragment>
   );

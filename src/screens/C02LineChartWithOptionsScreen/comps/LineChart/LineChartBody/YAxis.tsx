@@ -1,13 +1,19 @@
+import * as d3 from 'd3';
 import { G, Line, Text } from 'react-native-svg';
+
+import PaneBoundary from 'utils/PaneBoundary';
+
 import { LinearAxisOptions } from '../types';
 
 const DEFAULT_TICK_LENGTH = 6;
 
 type YAxisProps = LinearAxisOptions & {
   scale: d3.ScaleLinear<number, number, never>;
+  paneBoundary?: PaneBoundary;
 };
 function YAxis({
   scale,
+  paneBoundary,
   x = 0,
   y = 0,
 
@@ -27,6 +33,10 @@ function YAxis({
   tickLabelWeight,
   tickLabelColor = 'black',
   tickLabelFormatter = val => `${val}`,
+
+  showGridLines = true,
+  gridLineWidth = 1,
+  gridLineColor = 'lightgray',
 }: YAxisProps) {
   const range = scale.range();
   const ticks = !_ticks
@@ -78,6 +88,19 @@ function YAxis({
           ))}
         </>
       )}
+
+      {showGridLines &&
+        ticks.map(tick => (
+          <Line
+            key={`${tick}`}
+            x1={paneBoundary?.x1}
+            x2={paneBoundary?.x2}
+            y1={scale(tick)}
+            y2={scale(tick)}
+            stroke={gridLineColor}
+            strokeWidth={gridLineWidth}
+          />
+        ))}
     </G>
   );
 }

@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { G, Line, Text } from 'react-native-svg';
 
 import dateFormat from 'utils/dateFormat';
+import PaneBoundary from 'utils/PaneBoundary';
 
 import { TimeAxisOptions } from '../types';
 
@@ -9,9 +10,11 @@ const DEFAULT_TICK_LENGTH = 6;
 
 type XAxisProps = TimeAxisOptions & {
   scale: d3.ScaleTime<number, number, never>;
+  paneBoundary?: PaneBoundary;
 };
 function XAxis({
   scale,
+  paneBoundary,
   x = 0,
   y = 0,
 
@@ -32,6 +35,10 @@ function XAxis({
   tickLabelWeight,
   tickLabelColor = 'black',
   tickLabelFormatter = dateFormat,
+
+  showGridLines = false,
+  gridLineWidth = 1,
+  gridLineColor = 'lightgray',
 }: XAxisProps) {
   const range = scale.range();
   const ticks = !_ticks
@@ -84,6 +91,19 @@ function XAxis({
           ))}
         </>
       )}
+
+      {showGridLines &&
+        ticks.map(tick => (
+          <Line
+            key={`${tick}`}
+            x1={scale(tick)}
+            x2={scale(tick)}
+            y1={paneBoundary?.y1}
+            y2={paneBoundary?.y2}
+            stroke={gridLineColor}
+            strokeWidth={gridLineWidth}
+          />
+        ))}
     </G>
   );
 }

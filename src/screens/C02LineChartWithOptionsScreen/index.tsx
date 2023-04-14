@@ -81,6 +81,7 @@ function C02LineChartWithOptionsScreen() {
           height={200}
           xAxisOptions={{ showTicks: false, showGridLines: true }}
           yAxisOptions={{ showTicks: false, showGridLines: true }}
+          paneOptions={{ margin: 4 }}
           linesOptions={{
             colors: ['red', 'orange', 'green', 'blue'],
             lineWidth: 2,
@@ -94,6 +95,7 @@ function C02LineChartWithOptionsScreen() {
           height={200}
           xAxisOptions={{ showTicks: false, showGridLines: true }}
           yAxisOptions={{ showTicks: false, showGridLines: true }}
+          paneOptions={{ margin: 4 }}
           linesOptions={{
             colors: ['red', 'orange', 'green', 'blue'],
             lineWidth: 2,

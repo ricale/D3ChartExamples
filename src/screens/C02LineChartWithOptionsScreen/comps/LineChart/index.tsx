@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { useEffect } from 'react';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
 
@@ -9,6 +10,7 @@ import {
   TimeAxisOptions,
   LinearAxisOptions,
   LinesOptions,
+  PaneOptions,
 } from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
@@ -22,6 +24,7 @@ type LineChartProps = {
   xAxisOptions?: TimeAxisOptions;
   yAxisOptions?: LinearAxisOptions;
   linesOptions?: LinesOptions;
+  paneOptions?: PaneOptions;
 };
 function LineChart({
   series,
@@ -30,6 +33,7 @@ function LineChart({
   xAxisOptions,
   yAxisOptions,
   linesOptions,
+  paneOptions = {},
 }: LineChartProps) {
   const [state, setState] = useImmer({
     width: 0,
@@ -37,24 +41,37 @@ function LineChart({
     paneBoundary: new PaneBoundary({ x1: 0, x2: 0, y1: 0, y2: 0 }),
   });
 
-  const onLayout: SvgProps['onLayout'] = evt => {
-    const { layout } = evt.nativeEvent;
-    setState(dr => {
-      dr.width = Math.round(layout.width);
-      dr.height = Math.round(layout.height);
+  const { margin, marginTop, marginLeft, marginRight, marginBottom } =
+    paneOptions;
 
-      const marginTop = 10;
-      const marginLeft = DEFAULT_Y_AXIS_WIDTH;
-      const marginRight = 10;
-      const marginBottom = DEFAULT_X_AXIS_HEIGHT;
+  const updatePaneBoundary = (width?: number, height?: number) => {
+    setState(dr => {
+      if (width !== undefined) {
+        dr.width = Math.round(width);
+      }
+      if (height !== undefined) {
+        dr.height = Math.round(height);
+      }
 
       dr.paneBoundary = new PaneBoundary({
-        x1: marginLeft,
-        x2: dr.width - marginRight,
-        y1: dr.height - marginBottom,
-        y2: marginTop,
+        x1: marginLeft ?? margin ?? DEFAULT_Y_AXIS_WIDTH,
+        x2: dr.width - (marginRight ?? margin ?? 10),
+        y1: dr.height - (marginBottom ?? margin ?? DEFAULT_X_AXIS_HEIGHT),
+        y2: marginTop ?? margin ?? 10,
       });
     });
+  };
+
+  useEffect(() => {
+    if (!state.width || !state.height) {
+      return;
+    }
+    updatePaneBoundary();
+  }, [margin, marginTop, marginLeft, marginRight, marginBottom]);
+
+  const onLayout: SvgProps['onLayout'] = evt => {
+    const { layout } = evt.nativeEvent;
+    updatePaneBoundary(layout.width, layout.height);
   };
 
   const xScale = getTimeScale(series, state.paneBoundary.xs);

@@ -47,3 +47,11 @@ export type LinesOptions = {
   colors?: string[];
   lineWidth?: number;
 };
+
+export type PaneOptions = {
+  margin?: number;
+  marginTop?: number;
+  marginLeft?: number;
+  marginRight?: number;
+  marginBottom?: number;
+};

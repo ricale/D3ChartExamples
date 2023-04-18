@@ -1,6 +1,19 @@
 import { G, Path } from 'react-native-svg';
 import { LinesOptions, TimeSeries } from '../types';
 
+const DEFAULT_COLORS = [
+  'blue',
+  'skyblue',
+  'green',
+  'brown',
+  'gray',
+  'orange',
+  'purple',
+  'red',
+  'pink',
+  'black',
+];
+
 type LinesProps = LinesOptions & {
   series: TimeSeries[];
   lineFunc: d3.Line<TimeSeries['data'][0]>;
@@ -8,18 +21,7 @@ type LinesProps = LinesOptions & {
 function Lines({
   series,
   lineFunc,
-  colors = [
-    'blue',
-    'skyblue',
-    'green',
-    'brown',
-    'gray',
-    'orange',
-    'purple',
-    'red',
-    'pink',
-    'black',
-  ],
+  colors = DEFAULT_COLORS,
   lineWidth = 1,
 }: LinesProps) {
   return (

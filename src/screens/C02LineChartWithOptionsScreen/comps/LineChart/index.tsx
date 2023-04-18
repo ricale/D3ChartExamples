@@ -42,7 +42,7 @@ function LineChart({
   });
 
   const { margin, marginTop, marginLeft, marginRight, marginBottom } =
-    paneOptions;
+    paneOptions || {};
 
   const updatePaneBoundary = (width?: number, height?: number) => {
     setState(dr => {

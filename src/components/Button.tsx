@@ -1,12 +1,12 @@
-import {ReactNode} from 'react';
-import {Pressable, PressableProps, StyleSheet} from 'react-native';
+import { ReactNode } from 'react';
+import { Pressable, PressableProps, StyleSheet } from 'react-native';
 import Text from './Text';
 
 type ButtonProps = {
   title?: string;
   children?: ReactNode;
 } & PressableProps;
-function Button({title, children, ...props}: ButtonProps) {
+function Button({ title, children, ...props }: ButtonProps) {
   return (
     <Pressable style={styles.container} {...props}>
       {children}

@@ -1,10 +1,10 @@
-import {ReactNode} from 'react';
-import {StyleSheet, View} from 'react-native';
+import { ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 type ScreenContainerProps = {
   children: ReactNode;
 };
-function ScreenContainer({children}: ScreenContainerProps) {
+function ScreenContainer({ children }: ScreenContainerProps) {
   return <View style={styles.container}>{children}</View>;
 }
 

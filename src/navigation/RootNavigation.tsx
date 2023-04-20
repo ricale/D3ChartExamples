@@ -6,6 +6,7 @@ import C02LineChartWithOptionsScreen from 'screens/C02LineChartWithOptionsScreen
 import HomeScreen from 'screens/HomeScreen';
 
 import { RootStackParamsList } from './types';
+import C03LineChartWithLegendScreen from 'screens/C03LineChartWithLegendScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
@@ -22,6 +23,11 @@ function RootNavigation() {
         <Stack.Screen
           name="C02LineChartWithOptions"
           component={C02LineChartWithOptionsScreen}
+          options={{ animation: 'none' }}
+        />
+        <Stack.Screen
+          name="C03LineChartWithLegend"
+          component={C03LineChartWithLegendScreen}
           options={{ animation: 'none' }}
         />
       </Stack.Navigator>

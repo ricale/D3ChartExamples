@@ -13,6 +13,10 @@ const buttons: { title: string; screenName: keyof RootStackParamsList }[] = [
     title: 'C02 - 라인차트 옵션 기능 구현',
     screenName: 'C02LineChartWithOptions',
   },
+  {
+    title: 'C03 - 라인차트 옵션 기능 구현',
+    screenName: 'C03LineChartWithLegend',
+  },
 ];
 
 function HomeScreen() {

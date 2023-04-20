@@ -1,18 +1,6 @@
 import { G, Path } from 'react-native-svg';
 import { LinesOptions, TimeSeries } from '../types';
-
-const DEFAULT_COLORS = [
-  'blue',
-  'skyblue',
-  'green',
-  'brown',
-  'gray',
-  'orange',
-  'purple',
-  'red',
-  'pink',
-  'black',
-];
+import { DEFAULT_COLORS } from '../constants';
 
 type LinesProps = LinesOptions & {
   series: TimeSeries[];

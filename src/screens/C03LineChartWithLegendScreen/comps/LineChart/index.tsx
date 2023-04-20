@@ -16,6 +16,7 @@ import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
 import { DEFAULT_X_AXIS_HEIGHT, DEFAULT_Y_AXIS_WIDTH } from './constants';
+import Legend from './Legend';
 
 type LineChartProps = {
   series: TimeSeries[];
@@ -88,20 +89,23 @@ function LineChart({
   const loaded = xScale !== null && yScale !== null && lineFunc !== null;
 
   return (
-    <Svg width={width} height={height} onLayout={onLayout}>
-      {loaded && (
-        <LineChartBody
-          series={series}
-          xScale={xScale}
-          yScale={yScale}
-          lineFunc={lineFunc}
-          paneBoundary={state.paneBoundary}
-          xAxisOptions={xAxisOptions}
-          yAxisOptions={yAxisOptions}
-          linesOptions={linesOptions}
-        />
-      )}
-    </Svg>
+    <>
+      <Svg width={width} height={height} onLayout={onLayout}>
+        {loaded && (
+          <LineChartBody
+            series={series}
+            xScale={xScale}
+            yScale={yScale}
+            lineFunc={lineFunc}
+            paneBoundary={state.paneBoundary}
+            xAxisOptions={xAxisOptions}
+            yAxisOptions={yAxisOptions}
+            linesOptions={linesOptions}
+          />
+        )}
+      </Svg>
+      <Legend series={series} linesOptions={linesOptions} />
+    </>
   );
 }
 

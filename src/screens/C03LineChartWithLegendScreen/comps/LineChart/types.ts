@@ -3,6 +3,7 @@ import { FontWeight } from 'react-native-svg';
 
 export type TimeSeriesDatum = { date: Date; value: number };
 export type TimeSeries = {
+  name?: string;
   color?: string;
   lineWidth?: number;
   data: TimeSeriesDatum[];

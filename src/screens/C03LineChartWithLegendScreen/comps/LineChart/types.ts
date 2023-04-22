@@ -57,3 +57,39 @@ export type PaneOptions = {
   marginRight?: number;
   marginBottom?: number;
 };
+
+export type LegendOptions = {
+  enabled?: boolean;
+
+  position?: 'bottom' | 'top';
+  direction?: 'row' | 'column';
+  align?: 'center' | 'flex-start' | 'flex-end';
+
+  itemPadding?: number;
+  itemPaddingTop?: number;
+  itemPaddingLeft?: number;
+  itemPaddingRight?: number;
+  itemPaddingBottom?: number;
+
+  itemGap?: number;
+  itemNotVisibleColor?: string;
+
+  itemRectWidth?: number;
+  itemRectHeight?: number;
+  itemRectBorderRadius?: number;
+
+  itemLabelSize?: number;
+  itemLabelFont?: string;
+  itemLabelWeight?:
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900';
+  itemLabelColor?: string;
+  itemLabelFormatter?: (series: TimeSeries, idx: number) => string;
+};

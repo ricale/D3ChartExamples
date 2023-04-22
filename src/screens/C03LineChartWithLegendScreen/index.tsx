@@ -17,6 +17,25 @@ function C03LineChartWithLegendScreen() {
       <ScrollView>
         <Text style={styles.subtitle}>옵션 적용 안 함</Text>
         <LineChart series={dummySeries} width="100%" height={200} />
+
+        <Text style={styles.subtitle}>옵션 position: 'top'</Text>
+        <LineChart
+          series={dummySeries}
+          width="100%"
+          height={200}
+          legendOptions={{
+            position: 'top',
+            direction: 'column',
+            align: 'flex-end',
+            itemPadding: 0,
+            itemPaddingLeft: 16,
+            itemPaddingRight: 16,
+            itemLabelSize: 10,
+            itemGap: 0,
+            itemNotVisibleColor: 'darkgray',
+            itemRectBorderRadius: 20,
+          }}
+        />
       </ScrollView>
     </ScreenContainer>
   );

@@ -27,7 +27,9 @@ function Pressable({
       onPressIn={onPressIn}
       onPressOut={onPressOut}
       style={
-        typeof style === 'object'
+        Array.isArray(style)
+          ? [...style, { opacity: pressed ? 0.2 : 1 }]
+          : typeof style === 'object'
           ? { ...style, opacity: pressed ? 0.2 : 1 }
           : style
       }

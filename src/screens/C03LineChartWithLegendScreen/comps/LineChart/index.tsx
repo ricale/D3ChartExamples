@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import { useEffect } from 'react';
+import { View } from 'react-native';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
 
@@ -11,12 +12,15 @@ import {
   LinearAxisOptions,
   LinesOptions,
   PaneOptions,
+  LegendOptions,
 } from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
 import { DEFAULT_X_AXIS_HEIGHT, DEFAULT_Y_AXIS_WIDTH } from './constants';
 import Legend from './Legend';
+
+const DEFAULT_MARGIN = 4;
 
 type LineChartProps = {
   series: TimeSeries[];
@@ -26,6 +30,7 @@ type LineChartProps = {
   yAxisOptions?: LinearAxisOptions;
   linesOptions?: LinesOptions;
   paneOptions?: PaneOptions;
+  legendOptions?: LegendOptions;
 };
 function LineChart({
   series,
@@ -35,6 +40,7 @@ function LineChart({
   yAxisOptions,
   linesOptions,
   paneOptions = {},
+  legendOptions,
 }: LineChartProps) {
   const [state, setState] = useImmer({
     width: 0,
@@ -57,9 +63,9 @@ function LineChart({
 
       dr.paneBoundary = new PaneBoundary({
         x1: marginLeft ?? margin ?? DEFAULT_Y_AXIS_WIDTH,
-        x2: dr.width - (marginRight ?? margin ?? 10),
+        x2: dr.width - (marginRight ?? margin ?? DEFAULT_MARGIN),
         y1: dr.height - (marginBottom ?? margin ?? DEFAULT_X_AXIS_HEIGHT),
-        y2: marginTop ?? margin ?? 10,
+        y2: marginTop ?? margin ?? DEFAULT_MARGIN,
       });
     });
   };
@@ -107,7 +113,12 @@ function LineChart({
   };
 
   return (
-    <>
+    <View
+      style={{
+        flexDirection:
+          legendOptions?.position === 'top' ? 'column-reverse' : 'column',
+      }}
+    >
       <Svg width={width} height={height} onLayout={onLayout}>
         {loaded && (
           <LineChartBody
@@ -123,11 +134,12 @@ function LineChart({
         )}
       </Svg>
       <Legend
-        series={series}
+        series={state.series}
         linesOptions={linesOptions}
         onClickItem={onClickLegendItem}
+        {...legendOptions}
       />
-    </>
+    </View>
   );
 }
 

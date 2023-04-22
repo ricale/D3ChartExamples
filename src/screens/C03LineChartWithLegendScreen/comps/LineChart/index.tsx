@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
-import { useEffect } from 'react';
-import { View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { View, ViewProps } from 'react-native';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
 
@@ -18,9 +18,15 @@ import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
 import { DEFAULT_X_AXIS_HEIGHT, DEFAULT_Y_AXIS_WIDTH } from './constants';
-import Legend from './Legend';
+import Legend, { LegendProps } from './Legend';
 
 const DEFAULT_MARGIN = 4;
+
+type UpdatePaneBoundaryOptions = {
+  containerWidth?: number;
+  svgHeight?: number;
+  legendWidth?: number;
+};
 
 type LineChartProps = {
   series: TimeSeries[];
@@ -42,44 +48,91 @@ function LineChart({
   paneOptions = {},
   legendOptions,
 }: LineChartProps) {
+  const sizeRef = useRef({
+    legendWidth: 0,
+    containerWidth: 0,
+    svgHeight: 0,
+  });
   const [state, setState] = useImmer({
-    width: 0,
-    height: 0,
+    svgWidth: 0,
     paneBoundary: new PaneBoundary({ x1: 0, x2: 0, y1: 0, y2: 0 }),
     series: [] as TimeSeries[],
   });
 
-  const { margin, marginTop, marginLeft, marginRight, marginBottom } =
-    paneOptions || {};
+  const updateSizes = ({
+    containerWidth,
+    svgHeight,
+    legendWidth,
+  }: UpdatePaneBoundaryOptions = {}) => {
+    if (containerWidth !== undefined) {
+      sizeRef.current.containerWidth = containerWidth;
+    }
+    if (legendWidth !== undefined) {
+      sizeRef.current.legendWidth = legendWidth;
+    }
+    if (svgHeight !== undefined) {
+      sizeRef.current.svgHeight = svgHeight;
+    }
 
-  const updatePaneBoundary = (width?: number, height?: number) => {
+    updatePaneBoundary();
+  };
+
+  const updatePaneBoundary = () => {
+    if (
+      sizeRef.current.containerWidth === 0 ||
+      sizeRef.current.legendWidth === 0
+    ) {
+      return;
+    }
+
+    const horizontalLegend =
+      legendOptions?.enabled !== false &&
+      (legendOptions?.position === 'left' ||
+        legendOptions?.position === 'right');
+
+    const svgWidth = horizontalLegend
+      ? sizeRef.current.containerWidth - sizeRef.current.legendWidth
+      : sizeRef.current.containerWidth;
+
     setState(dr => {
-      if (width !== undefined) {
-        dr.width = Math.round(width);
-      }
-      if (height !== undefined) {
-        dr.height = Math.round(height);
-      }
+      dr.svgWidth = svgWidth;
+
+      const { margin, marginTop, marginLeft, marginRight, marginBottom } =
+        paneOptions || {};
 
       dr.paneBoundary = new PaneBoundary({
         x1: marginLeft ?? margin ?? DEFAULT_Y_AXIS_WIDTH,
-        x2: dr.width - (marginRight ?? margin ?? DEFAULT_MARGIN),
-        y1: dr.height - (marginBottom ?? margin ?? DEFAULT_X_AXIS_HEIGHT),
+        x2: dr.svgWidth - (marginRight ?? margin ?? DEFAULT_MARGIN),
+        y1:
+          sizeRef.current.svgHeight -
+          (marginBottom ?? margin ?? DEFAULT_X_AXIS_HEIGHT),
         y2: marginTop ?? margin ?? DEFAULT_MARGIN,
       });
     });
   };
 
   useEffect(() => {
-    if (!state.width || !state.height) {
-      return;
-    }
     updatePaneBoundary();
-  }, [margin, marginTop, marginLeft, marginRight, marginBottom]);
+  }, [
+    paneOptions?.margin,
+    paneOptions?.marginTop,
+    paneOptions?.marginLeft,
+    paneOptions?.marginRight,
+    paneOptions?.marginBottom,
+    legendOptions?.enabled,
+    legendOptions?.position,
+  ]);
+
+  const onContainerLayout: ViewProps['onLayout'] = evt => {
+    updateSizes({ containerWidth: evt.nativeEvent.layout.width });
+  };
 
   const onLayout: SvgProps['onLayout'] = evt => {
-    const { layout } = evt.nativeEvent;
-    updatePaneBoundary(layout.width, layout.height);
+    updateSizes({ svgHeight: evt.nativeEvent.layout.height });
+  };
+
+  const onLayoutLegend: LegendProps['onLayout'] = evt => {
+    updateSizes({ legendWidth: evt.nativeEvent.layout.width });
   };
 
   useEffect(() => {
@@ -116,10 +169,18 @@ function LineChart({
     <View
       style={{
         flexDirection:
-          legendOptions?.position === 'top' ? 'column-reverse' : 'column',
+          legendOptions?.position === 'top'
+            ? 'column-reverse'
+            : legendOptions?.position === 'right'
+            ? 'row'
+            : legendOptions?.position === 'left'
+            ? 'row-reverse'
+            : 'column',
+        width: width,
       }}
+      onLayout={onContainerLayout}
     >
-      <Svg width={width} height={height} onLayout={onLayout}>
+      <Svg width={state.svgWidth} height={height} onLayout={onLayout}>
         {loaded && (
           <LineChartBody
             series={state.series}
@@ -137,6 +198,7 @@ function LineChart({
         series={state.series}
         linesOptions={linesOptions}
         onClickItem={onClickLegendItem}
+        onLayout={onLayoutLegend}
         {...legendOptions}
       />
     </View>

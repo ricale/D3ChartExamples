@@ -36,6 +36,26 @@ function C03LineChartWithLegendScreen() {
             itemRectBorderRadius: 20,
           }}
         />
+
+        <Text style={styles.subtitle}>옵션 position: 'right'</Text>
+        <LineChart
+          series={dummySeries}
+          width="100%"
+          height={200}
+          legendOptions={{
+            position: 'right',
+          }}
+        />
+
+        <Text style={styles.subtitle}>옵션 position: 'left'</Text>
+        <LineChart
+          series={dummySeries}
+          width="100%"
+          height={200}
+          legendOptions={{
+            position: 'left',
+          }}
+        />
       </ScrollView>
     </ScreenContainer>
   );

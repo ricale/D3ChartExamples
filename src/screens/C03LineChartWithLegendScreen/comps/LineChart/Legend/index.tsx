@@ -1,28 +1,31 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewProps } from 'react-native';
 
 import Text from 'components/Text';
 
 import Pressable from '../../Pressable';
 import { LegendOptions, LinesOptions, TimeSeries } from '../types';
 import { DEFAULT_COLORS } from '../constants';
+import getContainerStyle from './getContainerStyle';
 
 const NOT_VISIBLE_COLOR = 'gainsboro';
 
-type LegendProps = LegendOptions & {
+export type LegendProps = LegendOptions & {
   series: TimeSeries[];
   linesOptions?: LinesOptions;
   onClickItem?: (sr: TimeSeries, idx: number) => void;
+  onLayout?: ViewProps['onLayout'];
 };
 function Legend({
   series,
   linesOptions,
   onClickItem,
+  onLayout,
 
   enabled = true,
 
-  // position,
+  position,
   direction = 'row',
-  align = 'center',
+  align,
 
   itemGap = 4,
   itemNotVisibleColor = NOT_VISIBLE_COLOR,
@@ -50,15 +53,8 @@ function Legend({
   }
   return (
     <View
-      style={[
-        styles.container,
-        {
-          flexDirection: direction,
-          flexWrap: direction === 'row' ? 'wrap' : undefined,
-          justifyContent: direction === 'row' ? align : 'center',
-          alignItems: direction === 'column' ? align : 'center',
-        },
-      ]}
+      onLayout={onLayout}
+      style={getContainerStyle({ position, direction, align })}
     >
       {series.map((sr, i) => (
         <Pressable
@@ -106,9 +102,6 @@ function Legend({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
   item: {
     flexDirection: 'row',
     alignItems: 'center',

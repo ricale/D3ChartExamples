@@ -61,7 +61,7 @@ export type PaneOptions = {
 export type LegendOptions = {
   enabled?: boolean;
 
-  position?: 'bottom' | 'top';
+  position?: 'bottom' | 'top' | 'left' | 'right';
   direction?: 'row' | 'column';
   align?: 'center' | 'flex-start' | 'flex-end';
 

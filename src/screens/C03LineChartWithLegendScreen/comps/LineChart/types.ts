@@ -65,6 +65,9 @@ export type LegendOptions = {
   direction?: 'row' | 'column';
   align?: 'center' | 'flex-start' | 'flex-end';
 
+  width?: number;
+  height?: number;
+
   itemPadding?: number;
   itemPaddingTop?: number;
   itemPaddingLeft?: number;

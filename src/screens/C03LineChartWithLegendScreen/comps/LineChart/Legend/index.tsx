@@ -27,6 +27,9 @@ function Legend({
   direction = 'row',
   align,
 
+  width,
+  height,
+
   itemGap = 4,
   itemNotVisibleColor = NOT_VISIBLE_COLOR,
 
@@ -54,7 +57,7 @@ function Legend({
   return (
     <View
       onLayout={onLayout}
-      style={getContainerStyle({ position, direction, align })}
+      style={getContainerStyle({ position, direction, align, width, height })}
     >
       {series.map((sr, i) => (
         <Pressable

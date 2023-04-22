@@ -5,21 +5,26 @@ const getContainerStyle = ({
   position,
   direction,
   align,
+  width,
+  height,
 }: LegendOptions): ViewProps['style'] => {
   if (position === 'right' || position === 'left') {
     return {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: align ?? 'flex-start',
+      width,
     };
   }
 
   if (direction === 'column') {
     return {
       flexDirection: 'column',
-      justifyContent: 'center',
+      justifyContent: height ? 'flex-start' : 'center',
       alignItems: align ?? 'center',
-      width: '100%',
+      flexWrap: height ? 'wrap' : undefined,
+      width: width ?? '100%',
+      height,
     };
   }
 
@@ -28,7 +33,8 @@ const getContainerStyle = ({
     justifyContent: align ?? 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
-    width: '100%',
+    width: width ?? '100%',
+    height,
   };
 };
 

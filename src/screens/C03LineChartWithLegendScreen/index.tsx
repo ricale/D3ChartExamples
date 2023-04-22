@@ -26,7 +26,8 @@ function C03LineChartWithLegendScreen() {
           legendOptions={{
             position: 'top',
             direction: 'column',
-            align: 'flex-end',
+            align: 'flex-start',
+            height: 50,
             itemPadding: 0,
             itemPaddingLeft: 16,
             itemPaddingRight: 16,
@@ -54,6 +55,7 @@ function C03LineChartWithLegendScreen() {
           height={200}
           legendOptions={{
             position: 'left',
+            width: 60,
           }}
         />
       </ScrollView>

@@ -6,6 +6,7 @@ export type TimeSeries = {
   name?: string;
   color?: string;
   lineWidth?: number;
+  visible?: boolean;
   data: TimeSeriesDatum[];
 };
 

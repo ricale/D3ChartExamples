@@ -14,16 +14,18 @@ function Lines({
 }: LinesProps) {
   return (
     <G>
-      {series.map((sr, i) => (
-        <Path
-          key={i}
-          d={lineFunc(sr.data) ?? undefined}
-          stroke={sr.color ?? colors[i % colors.length]}
-          strokeLinecap="round"
-          fill="transparent"
-          strokeWidth={sr.lineWidth ?? lineWidth}
-        />
-      ))}
+      {series.map((sr, i) =>
+        !sr.visible ? null : (
+          <Path
+            key={i}
+            d={lineFunc(sr.data) ?? undefined}
+            stroke={sr.color ?? colors[i % colors.length]}
+            strokeLinecap="round"
+            fill="transparent"
+            strokeWidth={sr.lineWidth ?? lineWidth}
+          />
+        )
+      )}
     </G>
   );
 }

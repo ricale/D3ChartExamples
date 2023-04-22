@@ -40,6 +40,7 @@ function LineChart({
     width: 0,
     height: 0,
     paneBoundary: new PaneBoundary({ x1: 0, x2: 0, y1: 0, y2: 0 }),
+    series: [] as TimeSeries[],
   });
 
   const { margin, marginTop, marginLeft, marginRight, marginBottom } =
@@ -75,8 +76,17 @@ function LineChart({
     updatePaneBoundary(layout.width, layout.height);
   };
 
-  const xScale = getTimeScale(series, state.paneBoundary.xs);
-  const yScale = getLinearScale(series, state.paneBoundary.ys);
+  useEffect(() => {
+    setState(dr => {
+      dr.series = series.map(sr => ({
+        ...sr,
+        visible: sr.visible ?? true,
+      }));
+    });
+  }, [series]);
+
+  const xScale = getTimeScale(state.series, state.paneBoundary.xs);
+  const yScale = getLinearScale(state.series, state.paneBoundary.ys);
   const lineFunc =
     !xScale || !yScale
       ? null
@@ -88,12 +98,20 @@ function LineChart({
 
   const loaded = xScale !== null && yScale !== null && lineFunc !== null;
 
+  const onClickLegendItem = (sr: TimeSeries, idx: number) => {
+    setState(dr => {
+      dr.series = dr.series.map((sr, i) =>
+        i !== idx ? sr : { ...sr, visible: !sr.visible }
+      );
+    });
+  };
+
   return (
     <>
       <Svg width={width} height={height} onLayout={onLayout}>
         {loaded && (
           <LineChartBody
-            series={series}
+            series={state.series}
             xScale={xScale}
             yScale={yScale}
             lineFunc={lineFunc}
@@ -104,7 +122,11 @@ function LineChart({
           />
         )}
       </Svg>
-      <Legend series={series} linesOptions={linesOptions} />
+      <Legend
+        series={series}
+        linesOptions={linesOptions}
+        onClickItem={onClickLegendItem}
+      />
     </>
   );
 }

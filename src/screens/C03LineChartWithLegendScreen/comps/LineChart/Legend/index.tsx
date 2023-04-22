@@ -2,20 +2,25 @@ import { StyleSheet, View } from 'react-native';
 
 import Text from 'components/Text';
 
+import Pressable from '../../Pressable';
 import { LinesOptions, TimeSeries } from '../types';
 import { DEFAULT_COLORS } from '../constants';
-import { Fragment } from 'react';
 
 type LegendProps = {
   series: TimeSeries[];
   linesOptions?: LinesOptions;
+  onClickItem?: (sr: TimeSeries, idx: number) => void;
 };
-function Legend({ series, linesOptions }: LegendProps) {
+function Legend({ series, linesOptions, onClickItem }: LegendProps) {
   const colors = linesOptions?.colors ?? DEFAULT_COLORS;
   return (
     <View style={styles.container}>
       {series.map((sr, i) => (
-        <View key={i} style={styles.item}>
+        <Pressable
+          key={i}
+          style={styles.item}
+          onPress={() => onClickItem?.(sr, i)}
+        >
           <View
             style={{
               ...styles.rect,
@@ -23,7 +28,7 @@ function Legend({ series, linesOptions }: LegendProps) {
             }}
           />
           <Text>{sr.name ?? `시리즈 ${i + 1}`}</Text>
-        </View>
+        </Pressable>
       ))}
     </View>
   );
@@ -38,8 +43,10 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 8,
-    marginRight: 8,
+    paddingTop: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingBottom: 4,
   },
   space: {
     width: 16,

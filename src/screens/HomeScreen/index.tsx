@@ -8,10 +8,14 @@ import useNavigation from 'navigation/useNavigation';
 import { RootStackParamsList } from 'navigation/types';
 
 const buttons: { title: string; screenName: keyof RootStackParamsList }[] = [
-  { title: 'C01 - 라인차트 기본 기능 구현', screenName: 'C01LineChart' },
+  { title: 'C01 - 라인차트 기본', screenName: 'C01LineChart' },
   {
-    title: 'C02 - 라인차트 옵션 기능 구현',
+    title: 'C02 - 라인차트 옵션',
     screenName: 'C02LineChartWithOptions',
+  },
+  {
+    title: 'C03 - 라인차트 레전드',
+    screenName: 'C03LineChartWithLegend',
   },
 ];
 

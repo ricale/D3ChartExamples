@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { useEffect } from 'react';
-import { View, ViewProps } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
 
@@ -15,8 +15,8 @@ import {
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
-import Legend, { LegendProps } from './Legend';
-import useChartSize from './useChartSize';
+import Legend from './Legend';
+import useChartPaneBoundary from './useChartPaneBoundary';
 
 type LineChartProps = {
   series: TimeSeries[];
@@ -42,21 +42,13 @@ function LineChart({
     series: [] as TimeSeries[],
   });
 
-  const [{ svgWidth, paneBoundary }, updateSize] = useChartSize(
+  const [paneBoundary, updateSvgSize] = useChartPaneBoundary(
     paneOptions,
     legendOptions
   );
 
-  const onContainerLayout: ViewProps['onLayout'] = evt => {
-    updateSize({ containerWidth: evt.nativeEvent.layout.width });
-  };
-
   const onLayout: SvgProps['onLayout'] = evt => {
-    updateSize({ svgHeight: evt.nativeEvent.layout.height });
-  };
-
-  const onLayoutLegend: LegendProps['onLayout'] = evt => {
-    updateSize({ legendWidth: evt.nativeEvent.layout.width });
+    updateSvgSize(evt.nativeEvent.layout);
   };
 
   useEffect(() => {
@@ -102,31 +94,37 @@ function LineChart({
             : 'column',
         width: width,
       }}
-      onLayout={onContainerLayout}
     >
-      <Svg width={svgWidth} height={height} onLayout={onLayout}>
-        {loaded && (
-          <LineChartBody
-            series={state.series}
-            xScale={xScale}
-            yScale={yScale}
-            lineFunc={lineFunc}
-            paneBoundary={paneBoundary}
-            xAxisOptions={xAxisOptions}
-            yAxisOptions={yAxisOptions}
-            linesOptions={linesOptions}
-          />
-        )}
-      </Svg>
+      <View style={styles.chartWrapper}>
+        <Svg width="100%" height={height} onLayout={onLayout}>
+          {loaded && (
+            <LineChartBody
+              series={state.series}
+              xScale={xScale}
+              yScale={yScale}
+              lineFunc={lineFunc}
+              paneBoundary={paneBoundary}
+              xAxisOptions={xAxisOptions}
+              yAxisOptions={yAxisOptions}
+              linesOptions={linesOptions}
+            />
+          )}
+        </Svg>
+      </View>
       <Legend
         series={state.series}
         linesOptions={linesOptions}
         onClickItem={onClickLegendItem}
-        onLayout={onLayoutLegend}
         {...legendOptions}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  chartWrapper: {
+    flex: 1,
+  },
+});
 
 export default LineChart;

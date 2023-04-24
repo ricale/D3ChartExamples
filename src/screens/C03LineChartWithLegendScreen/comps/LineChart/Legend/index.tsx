@@ -1,4 +1,4 @@
-import { StyleSheet, View, ViewProps } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Text from 'components/Text';
 
@@ -9,17 +9,15 @@ import getContainerStyle from './getContainerStyle';
 
 const NOT_VISIBLE_COLOR = 'gainsboro';
 
-export type LegendProps = LegendOptions & {
+type LegendProps = LegendOptions & {
   series: TimeSeries[];
   linesOptions?: LinesOptions;
   onClickItem?: (sr: TimeSeries, idx: number) => void;
-  onLayout?: ViewProps['onLayout'];
 };
 function Legend({
   series,
   linesOptions,
   onClickItem,
-  onLayout,
 
   enabled = true,
 
@@ -56,7 +54,6 @@ function Legend({
   }
   return (
     <View
-      onLayout={onLayout}
       style={getContainerStyle({ position, direction, align, width, height })}
     >
       {series.map((sr, i) => (

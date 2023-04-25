@@ -17,6 +17,10 @@ const buttons: { title: string; screenName: keyof RootStackParamsList }[] = [
     title: 'C03 - 라인차트 레전드',
     screenName: 'C03LineChartWithLegend',
   },
+  {
+    title: 'C04 - 라인차트 특정 아이템 선택 기능',
+    screenName: 'C04SelectableLineChart',
+  },
 ];
 
 function HomeScreen() {

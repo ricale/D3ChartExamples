@@ -12,12 +12,12 @@ const NOT_VISIBLE_COLOR = 'gainsboro';
 type LegendProps = LegendOptions & {
   series: TimeSeries[];
   linesOptions?: LinesOptions;
-  onClickItem?: (sr: TimeSeries, idx: number) => void;
+  onPressItem?: (sr: TimeSeries, idx: number) => void;
 };
 function Legend({
   series,
   linesOptions,
-  onClickItem,
+  onPressItem,
 
   enabled = true,
 
@@ -68,7 +68,7 @@ function Legend({
               paddingBottom: itemPaddingBottom ?? itemPadding ?? 2,
             },
           ]}
-          onPress={() => onClickItem?.(sr, i)}
+          onPress={() => onPressItem?.(sr, i)}
         >
           <View
             style={{

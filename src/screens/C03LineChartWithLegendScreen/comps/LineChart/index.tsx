@@ -73,7 +73,7 @@ function LineChart({
 
   const loaded = xScale !== null && yScale !== null && lineFunc !== null;
 
-  const onClickLegendItem = (sr: TimeSeries, idx: number) => {
+  const onPressLegendItem = (sr: TimeSeries, idx: number) => {
     setState(dr => {
       dr.series = dr.series.map((sr, i) =>
         i !== idx ? sr : { ...sr, visible: !sr.visible }
@@ -114,7 +114,7 @@ function LineChart({
       <Legend
         series={state.series}
         linesOptions={linesOptions}
-        onClickItem={onClickLegendItem}
+        onPressItem={onPressLegendItem}
         {...legendOptions}
       />
     </View>

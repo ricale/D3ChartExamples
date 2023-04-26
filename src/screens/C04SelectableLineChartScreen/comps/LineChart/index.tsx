@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
@@ -11,12 +11,17 @@ import {
   LinesOptions,
   PaneOptions,
   LegendOptions,
+  SelectedItem,
 } from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
 import Legend from './Legend';
 import useChartPaneBoundary from './useChartPaneBoundary';
+import PanResponderView, {
+  PanResponderViewOnTouchStart,
+} from '../PanResponderView';
+import findItemsByCoord from './findItemsByCoord';
 
 type LineChartProps = {
   series: TimeSeries[];
@@ -40,6 +45,7 @@ function LineChart({
 }: LineChartProps) {
   const [state, setState] = useImmer({
     series: [] as TimeSeries[],
+    selected: null as null | (SelectedItem | null)[],
   });
 
   const [paneBoundary, updateSvgSize] = useChartPaneBoundary(
@@ -81,6 +87,22 @@ function LineChart({
     });
   };
 
+  const onTouchStart = useCallback<PanResponderViewOnTouchStart>(
+    touches => {
+      const selected = findItemsByCoord({
+        series: state.series,
+        range: paneBoundary.xs,
+        scale: xScale,
+        x: touches[0].locationX,
+      });
+
+      setState(dr => {
+        dr.selected = selected;
+      });
+    },
+    [state.series, paneBoundary]
+  );
+
   return (
     <View
       style={{
@@ -95,7 +117,7 @@ function LineChart({
         width: width,
       }}
     >
-      <View style={styles.chartWrapper}>
+      <PanResponderView style={styles.chartWrapper} onTouchStart={onTouchStart}>
         <Svg width="100%" height={height} onLayout={onLayout}>
           {loaded && (
             <LineChartBody
@@ -104,13 +126,14 @@ function LineChart({
               yScale={yScale}
               lineFunc={lineFunc}
               paneBoundary={paneBoundary}
+              selected={state.selected}
               xAxisOptions={xAxisOptions}
               yAxisOptions={yAxisOptions}
               linesOptions={linesOptions}
             />
           )}
         </Svg>
-      </View>
+      </PanResponderView>
       <Legend
         series={state.series}
         linesOptions={linesOptions}

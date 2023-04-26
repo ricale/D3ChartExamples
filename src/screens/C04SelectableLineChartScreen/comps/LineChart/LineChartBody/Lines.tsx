@@ -1,10 +1,12 @@
+import { Line as D3Line } from 'd3';
 import { G, Path } from 'react-native-svg';
+
 import { LinesOptions, TimeSeries } from '../types';
 import { DEFAULT_COLORS } from '../constants';
 
 type LinesProps = LinesOptions & {
   series: TimeSeries[];
-  lineFunc: d3.Line<TimeSeries['data'][0]>;
+  lineFunc: D3Line<TimeSeries['data'][0]>;
 };
 function Lines({
   series,

@@ -10,6 +10,8 @@ export type TimeSeries = {
   data: TimeSeriesDatum[];
 };
 
+export type SelectedItem = TimeSeriesDatum & { seriesIndex: number };
+
 export type AxisOptions<Scale, Value> = {
   enabled?: boolean;
 

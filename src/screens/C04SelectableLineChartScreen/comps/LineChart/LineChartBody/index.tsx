@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { ScaleLinear, ScaleTime, Line as D3Line } from 'd3';
 
 import PaneBoundary from 'utils/PaneBoundary';
 
@@ -7,17 +8,21 @@ import {
   TimeAxisOptions,
   LinearAxisOptions,
   LinesOptions,
+  SelectedItem,
 } from '../types';
+import { DEFAULT_COLORS } from '../constants';
 import XAxis from './XAxis';
 import YAxis from './YAxis';
 import Lines from './Lines';
+import SelectedItems from './SelectedItems';
 
 type LineChartBodyProps = {
   series: TimeSeries[];
-  xScale: d3.ScaleTime<number, number, never>;
-  yScale: d3.ScaleLinear<number, number, never>;
-  lineFunc: d3.Line<TimeSeries['data'][0]>;
+  xScale: ScaleTime<number, number, never>;
+  yScale: ScaleLinear<number, number, never>;
+  lineFunc: D3Line<TimeSeries['data'][0]>;
   paneBoundary: PaneBoundary;
+  selected: null | (SelectedItem | null)[];
 
   xAxisOptions?: TimeAxisOptions;
   yAxisOptions?: LinearAxisOptions;
@@ -29,6 +34,7 @@ function LineChartBody({
   yScale,
   lineFunc,
   paneBoundary,
+  selected,
   xAxisOptions,
   yAxisOptions,
   linesOptions,
@@ -38,6 +44,13 @@ function LineChartBody({
       <XAxis scale={xScale} paneBoundary={paneBoundary} {...xAxisOptions} />
       <YAxis scale={yScale} paneBoundary={paneBoundary} {...yAxisOptions} />
       <Lines series={series} lineFunc={lineFunc} {...linesOptions} />
+      <SelectedItems
+        xScale={xScale}
+        yScale={yScale}
+        paneBoundary={paneBoundary}
+        selected={selected}
+        colors={linesOptions?.colors ?? DEFAULT_COLORS}
+      />
     </Fragment>
   );
 }

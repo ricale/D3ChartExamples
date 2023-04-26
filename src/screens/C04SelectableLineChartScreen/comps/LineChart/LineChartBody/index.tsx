@@ -50,6 +50,7 @@ function LineChartBody({
         paneBoundary={paneBoundary}
         selected={selected}
         colors={linesOptions?.colors ?? DEFAULT_COLORS}
+        series={series}
       />
     </Fragment>
   );

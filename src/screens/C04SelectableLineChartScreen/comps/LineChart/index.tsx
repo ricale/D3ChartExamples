@@ -45,6 +45,7 @@ function LineChart({
 }: LineChartProps) {
   const [state, setState] = useImmer({
     series: [] as TimeSeries[],
+    touchedX: 0,
     selected: null as null | (SelectedItem | null)[],
   });
 
@@ -84,6 +85,14 @@ function LineChart({
       dr.series = dr.series.map((sr, i) =>
         i !== idx ? sr : { ...sr, visible: !sr.visible }
       );
+      if (dr.touchedX) {
+        dr.selected = findItemsByCoord({
+          series: dr.series,
+          range: paneBoundary.xs,
+          scale: xScale,
+          x: dr.touchedX,
+        });
+      }
     });
   };
 
@@ -97,6 +106,7 @@ function LineChart({
       });
 
       setState(dr => {
+        dr.touchedX = touches[0].locationX;
         dr.selected = selected;
       });
     },

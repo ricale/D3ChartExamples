@@ -44,9 +44,15 @@ function findItemsByCoord({
   }
 
   return series.map((sr, i) => {
+    if (!sr.visible) {
+      return null;
+    }
     // FIXME: 데이터가 일별 최대 하나라는 가정으로 작성된 코드
     const found = sr.data.find(item => isSameDay(item.date, date!));
-    return found ? { ...found, seriesIndex: i } : null;
+    if (!found) {
+      return null;
+    }
+    return { ...found, seriesIndex: i };
   });
 }
 

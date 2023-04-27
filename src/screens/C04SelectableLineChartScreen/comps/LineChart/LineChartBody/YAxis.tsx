@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { ScaleLinear } from 'd3';
 import { G, Line, Text } from 'react-native-svg';
 
 import PaneBoundary from 'utils/PaneBoundary';
@@ -8,7 +8,7 @@ import { LinearAxisOptions } from '../types';
 const DEFAULT_TICK_LENGTH = 6;
 
 type YAxisProps = LinearAxisOptions & {
-  scale: d3.ScaleLinear<number, number, never>;
+  scale: ScaleLinear<number, number, never>;
   paneBoundary: PaneBoundary;
 };
 function YAxis({
@@ -49,59 +49,59 @@ function YAxis({
     return null;
   }
   return (
-    <G>
-      <Line
-        x1={x}
-        x2={x}
-        y1={range[0] + y}
-        y2={range[1] + y}
-        stroke={lineColor}
-        strokeWidth={lineWidth}
-      />
-      {showTicks && (
-        <>
-          {ticks.map(tick => (
+    <>
+      <G x={x} y={y}>
+        <Line
+          y1={range[0]}
+          y2={range[1]}
+          stroke={lineColor}
+          strokeWidth={lineWidth}
+        />
+        {showTicks && (
+          <>
+            {ticks.map(tick => (
+              <Line
+                key={`${tick}`}
+                x1={-tickLength}
+                y1={scale(tick)}
+                y2={scale(tick)}
+                stroke={tickColor}
+                strokeWidth={tickWidth}
+              />
+            ))}
+            {ticks.map(tick => (
+              <Text
+                key={`${tick}`}
+                x={-tickLength - 2}
+                y={scale(tick)}
+                fill={tickLabelColor}
+                fontSize={tickLabelSize}
+                fontFamily={tickLabelFont}
+                fontWeight={tickLabelWeight}
+                textAnchor="end"
+                alignmentBaseline="middle"
+              >
+                {tickLabelFormatter(tick)}
+              </Text>
+            ))}
+          </>
+        )}
+      </G>
+      <G>
+        {showGridLines &&
+          ticks.map(tick => (
             <Line
               key={`${tick}`}
-              x1={x - tickLength}
-              x2={x}
+              x1={paneBoundary.x1}
+              x2={paneBoundary.x2}
               y1={scale(tick)}
               y2={scale(tick)}
-              stroke={tickColor}
-              strokeWidth={tickWidth}
+              stroke={gridLineColor}
+              strokeWidth={gridLineWidth}
             />
           ))}
-          {ticks.map(tick => (
-            <Text
-              key={`${tick}`}
-              x={x - tickLength - 2}
-              y={scale(tick)}
-              fill={tickLabelColor}
-              fontSize={tickLabelSize}
-              fontFamily={tickLabelFont}
-              fontWeight={tickLabelWeight}
-              textAnchor="end"
-              alignmentBaseline="middle"
-            >
-              {tickLabelFormatter(tick)}
-            </Text>
-          ))}
-        </>
-      )}
-
-      {showGridLines &&
-        ticks.map(tick => (
-          <Line
-            key={`${tick}`}
-            x1={paneBoundary.x1}
-            x2={paneBoundary.x2}
-            y1={scale(tick)}
-            y2={scale(tick)}
-            stroke={gridLineColor}
-            strokeWidth={gridLineWidth}
-          />
-        ))}
-    </G>
+      </G>
+    </>
   );
 }
 

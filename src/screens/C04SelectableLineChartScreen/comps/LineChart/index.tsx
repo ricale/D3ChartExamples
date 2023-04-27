@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Svg, SvgProps } from 'react-native-svg';
 import { useImmer } from 'use-immer';
@@ -11,17 +11,14 @@ import {
   LinesOptions,
   PaneOptions,
   LegendOptions,
-  SelectedItem,
 } from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
 import Legend from './Legend';
 import useChartPaneBoundary from './useChartPaneBoundary';
-import PanResponderView, {
-  PanResponderViewOnTouchStart,
-} from '../PanResponderView';
-import findItemsByCoord from './findItemsByCoord';
+import PanResponderView from '../PanResponderView';
+import useSelectionByTouch from './useSelectionByTouch';
 
 type LineChartProps = {
   series: TimeSeries[];
@@ -45,15 +42,12 @@ function LineChart({
 }: LineChartProps) {
   const [state, setState] = useImmer({
     series: [] as TimeSeries[],
-    touchedX: 0,
-    selected: null as null | (SelectedItem | null)[],
   });
 
   const [paneBoundary, updateSvgSize] = useChartPaneBoundary(
     paneOptions,
     legendOptions
   );
-
   const onLayout: SvgProps['onLayout'] = evt => {
     updateSvgSize(evt.nativeEvent.layout);
   };
@@ -78,40 +72,21 @@ function LineChart({
           .x(dt => xScale(dt.date))
           .y(dt => yScale(dt.value));
 
-  const loaded = xScale !== null && yScale !== null && lineFunc !== null;
+  const [selected, touchCallbacks] = useSelectionByTouch(
+    state.series,
+    xScale,
+    paneBoundary
+  );
 
   const onPressLegendItem = (sr: TimeSeries, idx: number) => {
     setState(dr => {
       dr.series = dr.series.map((sr, i) =>
         i !== idx ? sr : { ...sr, visible: !sr.visible }
       );
-      if (dr.touchedX) {
-        dr.selected = findItemsByCoord({
-          series: dr.series,
-          range: paneBoundary.xs,
-          scale: xScale,
-          x: dr.touchedX,
-        });
-      }
     });
   };
 
-  const onTouchStart = useCallback<PanResponderViewOnTouchStart>(
-    touches => {
-      const selected = findItemsByCoord({
-        series: state.series,
-        range: paneBoundary.xs,
-        scale: xScale,
-        x: touches[0].locationX,
-      });
-
-      setState(dr => {
-        dr.touchedX = touches[0].locationX;
-        dr.selected = selected;
-      });
-    },
-    [state.series, paneBoundary]
-  );
+  const loaded = xScale !== null && yScale !== null && lineFunc !== null;
 
   return (
     <View
@@ -127,7 +102,7 @@ function LineChart({
         width: width,
       }}
     >
-      <PanResponderView style={styles.chartWrapper} onTouchStart={onTouchStart}>
+      <PanResponderView style={styles.chartWrapper} {...touchCallbacks}>
         <Svg width="100%" height={height} onLayout={onLayout}>
           {loaded && (
             <LineChartBody
@@ -136,7 +111,7 @@ function LineChart({
               yScale={yScale}
               lineFunc={lineFunc}
               paneBoundary={paneBoundary}
-              selected={state.selected}
+              selected={selected}
               xAxisOptions={xAxisOptions}
               yAxisOptions={yAxisOptions}
               linesOptions={linesOptions}

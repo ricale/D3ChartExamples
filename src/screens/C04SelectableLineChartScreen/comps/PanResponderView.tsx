@@ -1,19 +1,19 @@
 import { useMemo, useRef } from 'react';
 import { NativeTouchEvent, PanResponder, View, ViewProps } from 'react-native';
 
-export type PanResponderViewOnTouchStart = (
-  touches: NativeTouchEvent[]
-) => void;
-export type PanResponderViewOnTouchEnd = () => void;
-export type PanResponderViewProps = Omit<
-  ViewProps,
-  'onTouchStart' | 'onTouchEnd'
-> & {
-  onTouchStart?: PanResponderViewOnTouchStart;
-  onTouchEnd?: PanResponderViewOnTouchEnd;
-};
+export type PanResponderViewProps = ViewProps;
+export type PanResponderViewOnTouchStart = NonNullable<
+  PanResponderViewProps['onTouchStart']
+>;
+export type PanResponderViewOnTouchMove = NonNullable<
+  PanResponderViewProps['onTouchMove']
+>;
+export type PanResponderViewOnTouchEnd = NonNullable<
+  PanResponderViewProps['onTouchEnd']
+>;
 function PanResponderView({
   onTouchStart,
+  onTouchMove,
   onTouchEnd,
   ...props
 }: PanResponderViewProps) {
@@ -25,21 +25,19 @@ function PanResponderView({
         onMoveShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponderCapture: () => true,
         onPanResponderGrant: (evt, _gestureState) => {
-          const { touches } = evt.nativeEvent;
-          onTouchStart?.(touches);
+          onTouchStart?.(evt);
         },
         onPanResponderMove: (evt, _gestureState) => {
-          const { touches } = evt.nativeEvent;
-          onTouchStart?.(touches);
+          onTouchMove?.(evt);
         },
         onPanResponderTerminationRequest: () => false,
-        onPanResponderRelease: (_evt, _gestureState) => {
-          onTouchEnd?.();
+        onPanResponderRelease: (evt, _gestureState) => {
+          onTouchEnd?.(evt);
         },
         onPanResponderTerminate: () => {},
         onShouldBlockNativeResponder: () => true,
       }),
-    [onTouchStart, onTouchEnd]
+    [onTouchStart, onTouchMove, onTouchEnd]
   );
 
   return <View {...props} {...panResponder.panHandlers} />;

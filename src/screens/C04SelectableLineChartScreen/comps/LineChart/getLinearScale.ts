@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { extent, scaleLinear } from 'd3';
 import { TimeSeries } from './types';
 
 function getLinearScale(series: TimeSeries[], range: [number, number]) {
@@ -19,14 +19,14 @@ function getLinearScale(series: TimeSeries[], range: [number, number]) {
     return null;
   }
 
-  const domain = d3.extent(allData, dt => dt.value) as [number, number];
+  const domain = extent(allData, dt => dt.value) as [number, number];
 
   const offsetDelta = 0.2;
   const offset = (domain[1] - domain[0]) * offsetDelta;
   domain[0] -= offset;
   domain[1] += offset;
 
-  const scale = d3.scaleLinear().domain(domain).range(range);
+  const scale = scaleLinear().domain(domain).range(range);
 
   return scale;
 }

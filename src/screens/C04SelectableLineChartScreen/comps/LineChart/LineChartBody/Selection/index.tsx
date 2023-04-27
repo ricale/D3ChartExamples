@@ -4,11 +4,11 @@ import { useImmer } from 'use-immer';
 
 import PaneBoundary from 'utils/PaneBoundary';
 
-import { SelectedItem, TimeSeries } from '../../types';
+import { SelectedItem, SelectionOptions, TimeSeries } from '../../types';
 import Dots from './Dots';
 import Tooltip, { TooltipProps } from './Tooltip';
 
-type SelectedItemsProps = {
+type SelectionProps = SelectionOptions & {
   xScale: ScaleTime<number, number, never>;
   yScale: ScaleLinear<number, number, never>;
   paneBoundary: PaneBoundary;
@@ -16,14 +16,22 @@ type SelectedItemsProps = {
   colors: string[];
   series: TimeSeries[];
 };
-function SelectedItems({
+function Selection({
   xScale,
   yScale,
   paneBoundary,
   selected: _selected,
   colors,
   series,
-}: SelectedItemsProps) {
+
+  enabled = true,
+
+  lineColor = 'gray',
+  lineWidth = 1,
+
+  dot: dotOptions,
+  tooltip: tooltipOptions,
+}: SelectionProps) {
   const [state, setState] = useImmer({
     tooltip: {
       width: 0,
@@ -65,21 +73,29 @@ function SelectedItems({
       ? x + 10
       : x - state.tooltip.width - 10;
 
+  if (!enabled) {
+    return null;
+  }
+
   return (
     <>
       <G>
-        <Line
-          x1={x}
-          x2={x}
-          y1={paneBoundary.y1}
-          y2={paneBoundary.y2}
-          stroke="gray"
-        />
+        {lineWidth > 0 && (
+          <Line
+            x1={x}
+            x2={x}
+            y1={paneBoundary.y1}
+            y2={paneBoundary.y2}
+            stroke={lineColor}
+            strokeWidth={lineWidth}
+          />
+        )}
         <Dots
           items={selected}
           xScale={xScale}
           yScale={yScale}
           colors={colors}
+          {...dotOptions}
         />
       </G>
       <Tooltip
@@ -89,9 +105,10 @@ function SelectedItems({
         series={series}
         colors={colors}
         onLayout={onTooltipLayout}
+        {...tooltipOptions}
       />
     </>
   );
 }
 
-export default SelectedItems;
+export default Selection;

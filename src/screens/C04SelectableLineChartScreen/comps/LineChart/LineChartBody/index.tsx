@@ -9,12 +9,13 @@ import {
   LinearAxisOptions,
   LinesOptions,
   SelectedItem,
+  SelectionOptions,
 } from '../types';
 import { DEFAULT_COLORS } from '../constants';
 import XAxis from './XAxis';
 import YAxis from './YAxis';
 import Lines from './Lines';
-import SelectedItems from './SelectedItems';
+import Selection from './Selection';
 
 type LineChartBodyProps = {
   series: TimeSeries[];
@@ -27,6 +28,7 @@ type LineChartBodyProps = {
   xAxisOptions?: TimeAxisOptions;
   yAxisOptions?: LinearAxisOptions;
   linesOptions?: LinesOptions;
+  selectionOptions?: SelectionOptions;
 };
 function LineChartBody({
   series,
@@ -38,19 +40,21 @@ function LineChartBody({
   xAxisOptions,
   yAxisOptions,
   linesOptions,
+  selectionOptions,
 }: LineChartBodyProps) {
   return (
     <Fragment>
       <XAxis scale={xScale} paneBoundary={paneBoundary} {...xAxisOptions} />
       <YAxis scale={yScale} paneBoundary={paneBoundary} {...yAxisOptions} />
       <Lines series={series} lineFunc={lineFunc} {...linesOptions} />
-      <SelectedItems
+      <Selection
         xScale={xScale}
         yScale={yScale}
         paneBoundary={paneBoundary}
         selected={selected}
         colors={linesOptions?.colors ?? DEFAULT_COLORS}
         series={series}
+        {...selectionOptions}
       />
     </Fragment>
   );

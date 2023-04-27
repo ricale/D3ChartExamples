@@ -1,5 +1,15 @@
 import { ScaleLinear, ScaleTime } from 'd3';
-import { FontWeight } from 'react-native-svg';
+
+type FontWeight =
+  | '100'
+  | '200'
+  | '300'
+  | '400'
+  | '500'
+  | '600'
+  | '700'
+  | '800'
+  | '900';
 
 export type TimeSeriesDatum = { date: Date; value: number };
 export type TimeSeries = {
@@ -85,16 +95,63 @@ export type LegendOptions = {
 
   itemLabelSize?: number;
   itemLabelFont?: string;
-  itemLabelWeight?:
-    | '100'
-    | '200'
-    | '300'
-    | '400'
-    | '500'
-    | '600'
-    | '700'
-    | '800'
-    | '900';
+  itemLabelWeight?: FontWeight;
   itemLabelColor?: string;
   itemLabelFormatter?: (series: TimeSeries, idx: number) => string;
+};
+
+export type SelectionOptions = {
+  enabled?: boolean;
+
+  lineColor?: string;
+  lineWidth?: number;
+
+  dot?: {
+    enabled?: boolean;
+
+    color?: string | ((seriesColor: string) => string);
+    radius?: number;
+    borderColor?: string | ((seriesColor: string) => string);
+    borderWidth?: number;
+  };
+
+  tooltip?: {
+    enabled?: boolean;
+
+    padding?: number;
+    paddingTop?: number;
+    paddingLeft?: number;
+    paddingRight?: number;
+    paddingBottom?: number;
+
+    backgroundColor?: string;
+    borderColor?: string;
+    borderWidth?: number;
+
+    titleFormatter?: (items: SelectedItem[]) => string;
+    titleSize?: number;
+    titleFont?: string;
+    titleWeight?: FontWeight;
+    titleColor?: string;
+
+    itemCircleRadius?: number;
+    itemCircleColor?: string | ((seriesColor: string) => string);
+
+    itemNameFormatter?: (item: SelectedItem, series: TimeSeries[]) => string;
+    itemNameSize?: number;
+    itemNameFont?: string;
+    itemNameWeight?: FontWeight;
+    itemNameColor?: string | ((seriesColor: string) => string);
+
+    itemValueFormatter?: (item: SelectedItem) => string;
+    itemValueSize?: number;
+    itemValueFont?: string;
+    itemValueWeight?: FontWeight;
+    itemValueColor?: string | ((seriesColor: string) => string);
+
+    titleHeight?: number;
+    itemHeight?: number;
+    itemCircleNameGap?: number;
+    itemNameValueGap?: number;
+  };
 };

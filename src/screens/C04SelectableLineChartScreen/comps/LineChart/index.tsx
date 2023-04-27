@@ -11,6 +11,7 @@ import {
   LinesOptions,
   PaneOptions,
   LegendOptions,
+  SelectionOptions,
 } from './types';
 import getTimeScale from './getTimeScale';
 import getLinearScale from './getLinearScale';
@@ -29,6 +30,7 @@ type LineChartProps = {
   linesOptions?: LinesOptions;
   paneOptions?: PaneOptions;
   legendOptions?: LegendOptions;
+  selectionOptions?: SelectionOptions;
 };
 function LineChart({
   series,
@@ -39,6 +41,7 @@ function LineChart({
   linesOptions,
   paneOptions = {},
   legendOptions,
+  selectionOptions,
 }: LineChartProps) {
   const [state, setState] = useImmer({
     series: [] as TimeSeries[],
@@ -115,6 +118,7 @@ function LineChart({
               xAxisOptions={xAxisOptions}
               yAxisOptions={yAxisOptions}
               linesOptions={linesOptions}
+              selectionOptions={selectionOptions}
             />
           )}
         </Svg>

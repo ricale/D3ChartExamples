@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { extent, scaleTime } from 'd3';
 import { TimeSeries } from './types';
 
 function getTimeScale(series: TimeSeries[], range: [number, number]) {
@@ -15,8 +15,8 @@ function getTimeScale(series: TimeSeries[], range: [number, number]) {
     (acc, sr) => [...acc, ...sr.data],
     [] as TimeSeries['data']
   );
-  const domain = d3.extent(allData, dt => dt.date) as [Date, Date];
-  const scale = d3.scaleTime().domain(domain).range(range);
+  const domain = extent(allData, dt => dt.date) as [Date, Date];
+  const scale = scaleTime().domain(domain).range(range);
 
   return scale;
 }

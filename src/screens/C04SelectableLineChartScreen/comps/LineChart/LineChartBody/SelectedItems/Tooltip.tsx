@@ -1,5 +1,8 @@
 import { Circle, G, GProps, Rect, TSpan, Text } from 'react-native-svg';
 import { useImmer } from 'use-immer';
+
+import dateFormat from 'utils/dateFormat';
+
 import { SelectedItem, TimeSeries } from '../../types';
 
 export type TooltipProps = {
@@ -58,8 +61,11 @@ function Tooltip({
         />
       )}
       <G x={10} y={10} onLayout={onContentLayout}>
+        <G y={0}>
+          <Text alignmentBaseline="hanging">{dateFormat(items[0].date)}</Text>
+        </G>
         {items.map((item, i) => (
-          <G key={item.seriesIndex} y={i * 14}>
+          <G key={i} y={14 + i * 14}>
             <Circle
               x={2}
               y={5}

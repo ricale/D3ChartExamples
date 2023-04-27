@@ -75,7 +75,7 @@ const dummyNames = [
   '샤인머스켓',
   '한라봉',
 ];
-const dummyDate = new Date('2022-01-01');
+const dummyDate = new Date('2022-01-01 00:00');
 
 const dummySeries: TimeSeries[] = dummyValues.map((values, i) => ({
   name: dummyNames[i],

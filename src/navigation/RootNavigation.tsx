@@ -3,10 +3,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import C01LineChartScreen from 'screens/C01LineChartScreen';
 import C02LineChartWithOptionsScreen from 'screens/C02LineChartWithOptionsScreen';
+import C03LineChartWithLegendScreen from 'screens/C03LineChartWithLegendScreen';
+import C04SelectableLineChartScreen from 'screens/C04SelectableLineChartScreen';
 import HomeScreen from 'screens/HomeScreen';
 
 import { RootStackParamsList } from './types';
-import C03LineChartWithLegendScreen from 'screens/C03LineChartWithLegendScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
@@ -28,6 +29,11 @@ function RootNavigation() {
         <Stack.Screen
           name="C03LineChartWithLegend"
           component={C03LineChartWithLegendScreen}
+          options={{ animation: 'none' }}
+        />
+        <Stack.Screen
+          name="C04SelectableLineChart"
+          component={C04SelectableLineChartScreen}
           options={{ animation: 'none' }}
         />
       </Stack.Navigator>

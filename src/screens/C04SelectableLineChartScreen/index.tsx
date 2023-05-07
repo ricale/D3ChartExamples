@@ -20,6 +20,18 @@ function C04SelectableLineChartScreen() {
           width="100%"
           height={200}
           xAxisOptions={{ showGridLines: true }}
+          selectionOptions={{
+            tooltip: {
+              enabled: false,
+            },
+          }}
+        />
+
+        <LineChart
+          series={dummySeries}
+          width="100%"
+          height={200}
+          xAxisOptions={{ showGridLines: true }}
         />
 
         <LineChart

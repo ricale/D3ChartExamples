@@ -18,7 +18,6 @@ import getLinearScale from './getLinearScale';
 import LineChartBody from './LineChartBody';
 import Legend from './Legend';
 import useChartPaneBoundary from './useChartPaneBoundary';
-import PanResponderView from '../PanResponderView';
 import useSelectionByTouch from './useSelectionByTouch';
 
 type LineChartProps = {
@@ -105,7 +104,7 @@ function LineChart({
         width: width,
       }}
     >
-      <PanResponderView style={styles.chartWrapper} {...touchCallbacks}>
+      <View style={styles.chartWrapper} {...touchCallbacks}>
         <Svg width="100%" height={height} onLayout={onLayout}>
           {loaded && (
             <LineChartBody
@@ -122,7 +121,7 @@ function LineChart({
             />
           )}
         </Svg>
-      </PanResponderView>
+      </View>
       <Legend
         series={state.series}
         linesOptions={linesOptions}

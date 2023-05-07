@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { ViewProps } from 'react-native';
 import { useImmer } from 'use-immer';
 
 import PaneBoundary from 'utils/PaneBoundary';
 
-import {
-  PanResponderViewOnTouchEnd,
-  PanResponderViewOnTouchMove,
-  PanResponderViewOnTouchStart,
-} from '../PanResponderView';
 import findItemsByCoord from './findItemsByCoord';
 import { SelectedItem, TimeSeries } from './types';
 import getTimeScale from './getTimeScale';
 
 const MIN_TOUCH_DURATION = 100;
+
+type OnTouchStart = NonNullable<ViewProps['onTouchStart']>;
+type OnTouchMove = NonNullable<ViewProps['onTouchMove']>;
+type OnTouchEnd = NonNullable<ViewProps['onTouchEnd']>;
 
 type UseSelectionByTouchState = {
   touchedX: number;
@@ -21,9 +21,9 @@ type UseSelectionByTouchState = {
 type UseSelectionByTouchReturns = [
   UseSelectionByTouchState['selected'],
   {
-    onTouchStart: PanResponderViewOnTouchStart;
-    onTouchMove: PanResponderViewOnTouchMove;
-    onTouchEnd: PanResponderViewOnTouchEnd;
+    onTouchStart: OnTouchStart;
+    onTouchMove: OnTouchMove;
+    onTouchEnd: OnTouchEnd;
   }
 ];
 
@@ -57,11 +57,11 @@ function useSelectionByTouch(
     }
   }, [series]);
 
-  const onTouchStart = useCallback<PanResponderViewOnTouchStart>(() => {
+  const onTouchStart = useCallback<OnTouchStart>(() => {
     touchRef.current.touchStartTimestamp = new Date().getTime();
   }, []);
 
-  const onTouchMove = useCallback<PanResponderViewOnTouchMove>(
+  const onTouchMove = useCallback<OnTouchMove>(
     evt => {
       const now = new Date().getTime();
       if (
@@ -86,7 +86,7 @@ function useSelectionByTouch(
     },
     [series, paneBoundary]
   );
-  const onTouchEnd = useCallback<PanResponderViewOnTouchEnd>(evt => {
+  const onTouchEnd = useCallback<OnTouchEnd>(evt => {
     const now = new Date().getTime();
 
     if (

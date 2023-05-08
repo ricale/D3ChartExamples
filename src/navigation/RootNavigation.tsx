@@ -5,6 +5,7 @@ import C01LineChartScreen from 'screens/C01LineChartScreen';
 import C02LineChartWithOptionsScreen from 'screens/C02LineChartWithOptionsScreen';
 import C03LineChartWithLegendScreen from 'screens/C03LineChartWithLegendScreen';
 import C04SelectableLineChartScreen from 'screens/C04SelectableLineChartScreen';
+import C05LineChartWithAnimScreen from 'screens/C05LineChartWithAnimScreen';
 import HomeScreen from 'screens/HomeScreen';
 
 import { RootStackParamsList } from './types';
@@ -34,6 +35,11 @@ function RootNavigation() {
         <Stack.Screen
           name="C04SelectableLineChart"
           component={C04SelectableLineChartScreen}
+          options={{ animation: 'none' }}
+        />
+        <Stack.Screen
+          name="C05LineChartWithAnim"
+          component={C05LineChartWithAnimScreen}
           options={{ animation: 'none' }}
         />
       </Stack.Navigator>

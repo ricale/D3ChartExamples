@@ -6,8 +6,11 @@ import { useImmer } from 'use-immer';
 import PaneBoundary from 'utils/PaneBoundary';
 
 import { LinearAxisOptions } from '../../types';
-import Ticks from './Ticks';
 import GridLines from './GridLines';
+import Tick from './Tick';
+import GridLine from './GridLine';
+
+const DEFAULT_TICK_LENGTH = 6;
 
 type YAxisProps = LinearAxisOptions & {
   scale: ScaleLinear<number, number, never>;
@@ -25,21 +28,21 @@ function YAxis({
   lineColor = 'black',
   lineWidth = 1,
 
-  showTicks,
+  showTicks = true,
   ticks: _ticks,
-  tickLength,
-  tickWidth,
-  tickColor,
+  tickLength = DEFAULT_TICK_LENGTH,
+  tickWidth = 1,
+  tickColor = 'black',
 
   tickLabelSize,
   tickLabelFont,
   tickLabelWeight,
-  tickLabelColor,
-  tickLabelFormatter,
+  tickLabelColor = 'black',
+  tickLabelFormatter = val => `${val}`,
 
-  showGridLines,
-  gridLineWidth,
-  gridLineColor,
+  showGridLines = true,
+  gridLineWidth = 1,
+  gridLineColor = 'lightgray',
 
   duration = 300,
 }: YAxisProps) {
@@ -83,32 +86,38 @@ function YAxis({
           stroke={lineColor}
           strokeWidth={lineWidth}
         />
-        <Ticks
-          scale={scale}
-          ticks={state.ticks}
-          enabled={showTicks}
-          tickLength={tickLength}
-          tickWidth={tickWidth}
-          tickColor={tickColor}
-          tickLabelSize={tickLabelSize}
-          tickLabelFont={tickLabelFont}
-          tickLabelWeight={tickLabelWeight}
-          tickLabelColor={tickLabelColor}
-          tickLabelFormatter={tickLabelFormatter}
-          duration={duration}
-        />
+        {showTicks &&
+          state.ticks.map(({ value, old }) => (
+            <Tick
+              key={`${value}`}
+              x={-tickLength}
+              y={scale(value)}
+              lineColor={tickColor}
+              lineWidth={tickWidth}
+              labelColor={tickLabelColor}
+              labelSize={tickLabelSize}
+              labelFont={tickLabelFont}
+              labelWeight={tickLabelWeight}
+              label={tickLabelFormatter(value)}
+              visible={!old}
+              duration={duration}
+            />
+          ))}
       </G>
       <G>
-        <GridLines
-          scale={scale}
-          ticks={state.ticks}
-          x1={paneBoundary.x1}
-          x2={paneBoundary.x2}
-          enabled={showGridLines}
-          gridLineColor={gridLineColor}
-          gridLineWidth={gridLineWidth}
-          duration={duration}
-        />
+        {showGridLines &&
+          state.ticks.map(({ value, old }) => (
+            <GridLine
+              key={`${value}`}
+              x1={paneBoundary.x1}
+              x2={paneBoundary.x2}
+              y={scale(value)}
+              lineColor={gridLineColor}
+              lineWidth={gridLineWidth}
+              visible={!old}
+              duration={duration}
+            />
+          ))}
       </G>
     </>
   );

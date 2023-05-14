@@ -19,7 +19,7 @@ type TicksProps = Pick<
   | 'tickLabelFormatter'
 > & {
   scale: ScaleLinear<number, number, never>;
-  ticks: number[];
+  ticks: { value: number; old: boolean }[];
   enabled?: LinearAxisOptions['showTicks'];
   duration?: number;
 };
@@ -38,32 +38,12 @@ function Ticks({
   tickLabelFormatter = val => `${val}`,
   duration = 300,
 }: TicksProps) {
-  const [state, setState] = useImmer({
-    ticks: [] as { value: number; old: boolean }[],
-  });
-
-  useEffect(() => {
-    setState(dr => {
-      dr.ticks = [
-        ...dr.ticks
-          .filter(it => !ticks.includes(it.value))
-          .map(it => ({ ...it, old: true })),
-        ...ticks.map(value => ({ value, old: false })),
-      ];
-    });
-    setTimeout(() => {
-      setState(dr => {
-        dr.ticks = dr.ticks.filter(it => !it.old);
-      });
-    }, duration);
-  }, [ticks]);
-
   if (!enabled) {
     return null;
   }
   return (
     <>
-      {state.ticks.map(({ value, old }) => (
+      {ticks.map(({ value, old }) => (
         <Tick
           key={`${value}`}
           x={-tickLength}

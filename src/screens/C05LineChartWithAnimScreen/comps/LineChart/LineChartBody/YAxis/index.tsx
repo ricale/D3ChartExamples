@@ -1,11 +1,10 @@
 import { ScaleLinear } from 'd3';
-import { G, Line, Text } from 'react-native-svg';
+import { G, Line } from 'react-native-svg';
 
 import PaneBoundary from 'utils/PaneBoundary';
 
-import { LinearAxisOptions } from '../types';
-
-const DEFAULT_TICK_LENGTH = 6;
+import { LinearAxisOptions } from '../../types';
+import Ticks from './Ticks';
 
 type YAxisProps = LinearAxisOptions & {
   scale: ScaleLinear<number, number, never>;
@@ -22,17 +21,17 @@ function YAxis({
   lineColor = 'black',
   lineWidth = 1,
 
-  showTicks = true,
+  showTicks,
   ticks: _ticks,
-  tickLength = DEFAULT_TICK_LENGTH,
-  tickWidth = 1,
-  tickColor = 'black',
+  tickLength,
+  tickWidth,
+  tickColor,
 
   tickLabelSize,
   tickLabelFont,
   tickLabelWeight,
-  tickLabelColor = 'black',
-  tickLabelFormatter = val => `${val}`,
+  tickLabelColor,
+  tickLabelFormatter,
 
   showGridLines = true,
   gridLineWidth = 1,
@@ -57,35 +56,19 @@ function YAxis({
           stroke={lineColor}
           strokeWidth={lineWidth}
         />
-        {showTicks && (
-          <>
-            {ticks.map(tick => (
-              <Line
-                key={`${tick}`}
-                x1={-tickLength}
-                y1={scale(tick)}
-                y2={scale(tick)}
-                stroke={tickColor}
-                strokeWidth={tickWidth}
-              />
-            ))}
-            {ticks.map(tick => (
-              <Text
-                key={`${tick}`}
-                x={-tickLength - 2}
-                y={scale(tick)}
-                fill={tickLabelColor}
-                fontSize={tickLabelSize}
-                fontFamily={tickLabelFont}
-                fontWeight={tickLabelWeight}
-                textAnchor="end"
-                alignmentBaseline="middle"
-              >
-                {tickLabelFormatter(tick)}
-              </Text>
-            ))}
-          </>
-        )}
+        <Ticks
+          scale={scale}
+          ticks={ticks}
+          enabled={showTicks}
+          tickLength={tickLength}
+          tickWidth={tickWidth}
+          tickColor={tickColor}
+          tickLabelSize={tickLabelSize}
+          tickLabelFont={tickLabelFont}
+          tickLabelWeight={tickLabelWeight}
+          tickLabelColor={tickLabelColor}
+          tickLabelFormatter={tickLabelFormatter}
+        />
       </G>
       <G>
         {showGridLines &&

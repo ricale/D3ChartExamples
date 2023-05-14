@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Path, PathProps } from 'react-native-svg';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 import { interpolatePath as d3InterpolatePath } from 'd3-interpolate-path';
 
 const INITIAL_PATH = 'M 0 0 Z';

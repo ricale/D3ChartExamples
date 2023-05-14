@@ -19,19 +19,18 @@ function Lines({
 }: LinesProps) {
   return (
     <G>
-      {series.map((sr, i) =>
-        !sr.visible ? null : (
-          <Path
-            key={i}
-            d={lineFunc(sr.data) ?? undefined}
-            stroke={sr.color ?? colors[i % colors.length]}
-            strokeLinecap="round"
-            fill="transparent"
-            strokeWidth={sr.lineWidth ?? lineWidth}
-            initialPrevD={initialPrevD}
-          />
-        )
-      )}
+      {series.map((sr, i) => (
+        <Path
+          key={i}
+          d={(sr.visible ? lineFunc(sr.data) : initialPrevD) ?? undefined}
+          stroke={sr.color ?? colors[i % colors.length]}
+          strokeLinecap="round"
+          fill="transparent"
+          strokeWidth={sr.lineWidth ?? lineWidth}
+          initialPrevD={initialPrevD}
+          visible={sr.visible}
+        />
+      ))}
     </G>
   );
 }

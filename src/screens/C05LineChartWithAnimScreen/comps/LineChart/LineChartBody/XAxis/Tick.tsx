@@ -1,7 +1,7 @@
-import { useRef } from 'react';
 import { G, Line, Text } from 'react-native-svg';
 
 import { LinearAxisOptions } from '../../types';
+import { useRef } from 'react';
 import useAnimWithDelta from '../../useAnimWithDelta';
 
 type TickProps = {
@@ -33,16 +33,16 @@ function Tick({
   const containerRef = useRef<G<any>>(null);
 
   useAnimWithDelta(
-    y,
+    x,
     (prev, current, delta) => {
       containerRef.current?.setNativeProps({
-        y: (current - prev) * delta + prev,
+        x: (current - prev) * delta + prev,
       });
     },
     {
       duration,
       onFirst: () => {
-        containerRef.current?.setNativeProps({ y });
+        containerRef.current?.setNativeProps({ x });
       },
     }
   );
@@ -65,15 +65,15 @@ function Tick({
 
   return (
     <G ref={containerRef}>
-      <Line x1={x} stroke={lineColor} strokeWidth={lineWidth} />
+      <Line y2={y} stroke={lineColor} strokeWidth={lineWidth} />
       <Text
-        x={x - 2}
+        y={y + 2}
         fill={labelColor}
         fontSize={labelSize}
         fontFamily={labelFont}
         fontWeight={labelWeight}
-        textAnchor="end"
-        alignmentBaseline="middle"
+        textAnchor="middle"
+        alignmentBaseline="hanging"
       >
         {label}
       </Text>

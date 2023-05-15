@@ -86,4 +86,9 @@ const dummySeries: TimeSeries[] = dummyValues.map((values, i) => ({
   }),
 }));
 
+dummySeries[0].data = dummySeries[0].data.slice(12);
+dummySeries[1].data = dummySeries[1].data.slice(12);
+dummySeries[2].data = dummySeries[2].data.slice(12);
+dummySeries[3].data = dummySeries[3].data.slice(12);
+
 export default dummySeries;

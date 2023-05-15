@@ -15,7 +15,12 @@ function C05LineChartWithAnimScreen() {
       </View>
 
       <ScrollView>
-        <LineChart series={dummySeries} width="100%" height={200} />
+        <LineChart
+          series={dummySeries}
+          width="100%"
+          height={200}
+          xAxisOptions={{ showGridLines: true }}
+        />
       </ScrollView>
     </ScreenContainer>
   );

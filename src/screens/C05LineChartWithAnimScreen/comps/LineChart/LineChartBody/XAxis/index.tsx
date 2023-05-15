@@ -1,26 +1,27 @@
 import { useEffect } from 'react';
-import { ScaleLinear } from 'd3';
-import { G, Line } from 'react-native-svg';
 import { useImmer } from 'use-immer';
+import { ScaleTime } from 'd3';
+import { G, Line, Text } from 'react-native-svg';
 
+import dateFormat from 'utils/dateFormat';
 import PaneBoundary from 'utils/PaneBoundary';
 
-import { LinearAxisOptions } from '../../types';
+import { TimeAxisOptions } from '../../types';
 import Tick from './Tick';
 import GridLine from './GridLine';
 
 const DEFAULT_TICK_LENGTH = 6;
 
-type YAxisProps = LinearAxisOptions & {
-  scale: ScaleLinear<number, number, never>;
+type XAxisProps = TimeAxisOptions & {
+  scale: ScaleTime<number, number, never>;
   paneBoundary: PaneBoundary;
   duration?: number;
 };
-function YAxis({
+function XAxis({
   scale,
   paneBoundary,
-  x = paneBoundary.x1,
-  y = 0,
+  x = 0,
+  y = paneBoundary.y1,
 
   enabled = true,
 
@@ -29,6 +30,7 @@ function YAxis({
 
   showTicks = true,
   ticks: _ticks,
+
   tickLength = DEFAULT_TICK_LENGTH,
   tickWidth = 1,
   tickColor = 'black',
@@ -37,18 +39,18 @@ function YAxis({
   tickLabelFont,
   tickLabelWeight,
   tickLabelColor = 'black',
-  tickLabelFormatter = val => `${val}`,
+  tickLabelFormatter = dateFormat,
 
-  showGridLines = true,
+  showGridLines = false,
   gridLineWidth = 1,
   gridLineColor = 'lightgray',
 
   duration = 300,
-}: YAxisProps) {
+}: XAxisProps) {
   const range = scale.range();
 
   const [state, setState] = useImmer({
-    ticks: [] as { value: number; old: boolean }[],
+    ticks: [] as { value: Date; old: boolean }[],
   });
 
   useEffect(() => {
@@ -61,7 +63,7 @@ function YAxis({
     setState(dr => {
       dr.ticks = [
         ...dr.ticks
-          .filter(it => !ticks.includes(it.value))
+          .filter(it => !ticks.find(tick => `${tick}` === `${it.value}`))
           .map(it => ({ ...it, old: true })),
         ...ticks.map(value => ({ value, old: false })),
       ];
@@ -80,17 +82,17 @@ function YAxis({
     <>
       <G x={x} y={y}>
         <Line
-          y1={range[0]}
-          y2={range[1]}
+          x1={range[0]}
+          x2={range[1]}
           stroke={lineColor}
           strokeWidth={lineWidth}
         />
         {showTicks &&
           state.ticks.map(({ value, old }) => (
             <Tick
-              key={`${value}`}
-              x={-tickLength}
-              y={scale(value)}
+              key={tickLabelFormatter(value)}
+              x={scale(value)}
+              y={tickLength}
               lineColor={tickColor}
               lineWidth={tickWidth}
               labelColor={tickLabelColor}
@@ -108,9 +110,9 @@ function YAxis({
           state.ticks.map(({ value, old }) => (
             <GridLine
               key={`${value}`}
-              x1={paneBoundary.x1}
-              x2={paneBoundary.x2}
-              y={scale(value)}
+              x={scale(value)}
+              y1={paneBoundary.y1}
+              y2={paneBoundary.y2}
               lineColor={gridLineColor}
               lineWidth={gridLineWidth}
               visible={!old}
@@ -122,4 +124,4 @@ function YAxis({
   );
 }
 
-export default YAxis;
+export default XAxis;

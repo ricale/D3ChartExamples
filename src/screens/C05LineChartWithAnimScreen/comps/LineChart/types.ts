@@ -47,6 +47,9 @@ export type AxisOptions<Scale, Value> = {
   showGridLines?: boolean;
   gridLineWidth?: number;
   gridLineColor?: string;
+
+  animatable?: boolean;
+  animDuration?: number;
 };
 export type TimeAxisOptions = AxisOptions<
   ScaleTime<number, number, never>,

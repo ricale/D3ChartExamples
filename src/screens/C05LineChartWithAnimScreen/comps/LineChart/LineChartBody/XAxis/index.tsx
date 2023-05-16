@@ -1,21 +1,20 @@
 import { useEffect } from 'react';
 import { useImmer } from 'use-immer';
 import { ScaleTime } from 'd3';
-import { G, Line, Text } from 'react-native-svg';
+import { G, Line } from 'react-native-svg';
 
 import dateFormat from 'utils/dateFormat';
 import PaneBoundary from 'utils/PaneBoundary';
 
 import { TimeAxisOptions } from '../../types';
-import Tick from './Tick';
-import GridLine from './GridLine';
+import XTick from './XTick';
+import VerticalLine from './VerticalLine';
 
 const DEFAULT_TICK_LENGTH = 6;
 
 type XAxisProps = TimeAxisOptions & {
   scale: ScaleTime<number, number, never>;
   paneBoundary: PaneBoundary;
-  duration?: number;
 };
 function XAxis({
   scale,
@@ -45,7 +44,8 @@ function XAxis({
   gridLineWidth = 1,
   gridLineColor = 'lightgray',
 
-  duration = 300,
+  animatable = true,
+  animDuration = 300,
 }: XAxisProps) {
   const range = scale.range();
 
@@ -61,18 +61,23 @@ function XAxis({
       : _ticks;
 
     setState(dr => {
-      dr.ticks = [
-        ...dr.ticks
-          .filter(it => !ticks.find(tick => `${tick}` === `${it.value}`))
-          .map(it => ({ ...it, old: true })),
-        ...ticks.map(value => ({ value, old: false })),
-      ];
+      const oldTicks = dr.ticks
+        .filter(it => !ticks.find(tick => `${tick}` === `${it.value}`))
+        .map(it => ({ ...it, old: true }));
+
+      dr.ticks = [...ticks.map(value => ({ value, old: false }))];
+      if (animatable) {
+        dr.ticks = [...oldTicks, ...dr.ticks];
+      }
     });
-    setTimeout(() => {
-      setState(dr => {
-        dr.ticks = dr.ticks.filter(it => !it.old);
-      });
-    }, duration);
+
+    if (animatable) {
+      setTimeout(() => {
+        setState(dr => {
+          dr.ticks = dr.ticks.filter(it => !it.old);
+        });
+      }, animDuration);
+    }
   }, [_ticks, scale]);
 
   if (!enabled) {
@@ -89,7 +94,7 @@ function XAxis({
         />
         {showTicks &&
           state.ticks.map(({ value, old }) => (
-            <Tick
+            <XTick
               key={tickLabelFormatter(value)}
               x={scale(value)}
               y={tickLength}
@@ -101,14 +106,15 @@ function XAxis({
               labelWeight={tickLabelWeight}
               label={tickLabelFormatter(value)}
               visible={!old}
-              duration={duration}
+              animatable={animatable}
+              duration={animDuration}
             />
           ))}
       </G>
       <G>
         {showGridLines &&
           state.ticks.map(({ value, old }) => (
-            <GridLine
+            <VerticalLine
               key={`${value}`}
               x={scale(value)}
               y1={paneBoundary.y1}
@@ -116,7 +122,8 @@ function XAxis({
               lineColor={gridLineColor}
               lineWidth={gridLineWidth}
               visible={!old}
-              duration={duration}
+              animatable={animatable}
+              duration={animDuration}
             />
           ))}
       </G>

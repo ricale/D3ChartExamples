@@ -6,15 +6,14 @@ import { useImmer } from 'use-immer';
 import PaneBoundary from 'utils/PaneBoundary';
 
 import { LinearAxisOptions } from '../../types';
-import Tick from './Tick';
-import GridLine from './GridLine';
+import YTick from './YTick';
+import HorizontalLine from './HorizontalLine';
 
 const DEFAULT_TICK_LENGTH = 6;
 
 type YAxisProps = LinearAxisOptions & {
   scale: ScaleLinear<number, number, never>;
   paneBoundary: PaneBoundary;
-  duration?: number;
 };
 function YAxis({
   scale,
@@ -43,7 +42,8 @@ function YAxis({
   gridLineWidth = 1,
   gridLineColor = 'lightgray',
 
-  duration = 300,
+  animatable = true,
+  animDuration = 300,
 }: YAxisProps) {
   const range = scale.range();
 
@@ -59,18 +59,23 @@ function YAxis({
       : _ticks;
 
     setState(dr => {
-      dr.ticks = [
-        ...dr.ticks
-          .filter(it => !ticks.includes(it.value))
-          .map(it => ({ ...it, old: true })),
-        ...ticks.map(value => ({ value, old: false })),
-      ];
+      const oldTicks = dr.ticks
+        .filter(it => !ticks.includes(it.value))
+        .map(it => ({ ...it, old: true }));
+
+      dr.ticks = [...ticks.map(value => ({ value, old: false }))];
+      if (animatable) {
+        dr.ticks = [...oldTicks, ...dr.ticks];
+      }
     });
-    setTimeout(() => {
-      setState(dr => {
-        dr.ticks = dr.ticks.filter(it => !it.old);
-      });
-    }, duration);
+
+    if (animatable) {
+      setTimeout(() => {
+        setState(dr => {
+          dr.ticks = dr.ticks.filter(it => !it.old);
+        });
+      }, animDuration);
+    }
   }, [_ticks, scale]);
 
   if (!enabled) {
@@ -87,7 +92,7 @@ function YAxis({
         />
         {showTicks &&
           state.ticks.map(({ value, old }) => (
-            <Tick
+            <YTick
               key={`${value}`}
               x={-tickLength}
               y={scale(value)}
@@ -99,14 +104,15 @@ function YAxis({
               labelWeight={tickLabelWeight}
               label={tickLabelFormatter(value)}
               visible={!old}
-              duration={duration}
+              animatable={animatable}
+              duration={animDuration}
             />
           ))}
       </G>
       <G>
         {showGridLines &&
           state.ticks.map(({ value, old }) => (
-            <GridLine
+            <HorizontalLine
               key={`${value}`}
               x1={paneBoundary.x1}
               x2={paneBoundary.x2}
@@ -114,7 +120,8 @@ function YAxis({
               lineColor={gridLineColor}
               lineWidth={gridLineWidth}
               visible={!old}
-              duration={duration}
+              animatable={animatable}
+              duration={animDuration}
             />
           ))}
       </G>

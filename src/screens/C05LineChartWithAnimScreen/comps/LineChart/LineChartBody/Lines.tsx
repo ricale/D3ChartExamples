@@ -16,19 +16,27 @@ function Lines({
   initialPrevD,
   colors = DEFAULT_COLORS,
   lineWidth = 1,
+  animatable = true,
 }: LinesProps) {
   return (
     <G>
       {series.map((sr, i) => (
         <Path
           key={i}
-          d={(sr.visible ? lineFunc(sr.data) : initialPrevD) ?? undefined}
+          d={
+            sr.visible
+              ? lineFunc(sr.data) ?? undefined
+              : animatable
+              ? initialPrevD
+              : undefined
+          }
           stroke={sr.color ?? colors[i % colors.length]}
           strokeLinecap="round"
           fill="transparent"
           strokeWidth={sr.lineWidth ?? lineWidth}
           initialPrevD={initialPrevD}
           visible={sr.visible}
+          animated={animatable}
         />
       ))}
     </G>

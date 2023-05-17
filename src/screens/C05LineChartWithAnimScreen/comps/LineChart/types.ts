@@ -63,6 +63,7 @@ export type LinearAxisOptions = AxisOptions<
 export type LinesOptions = {
   colors?: string[];
   lineWidth?: number;
+  animatable?: boolean;
 };
 
 export type PaneOptions = {

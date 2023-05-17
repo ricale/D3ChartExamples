@@ -32,7 +32,7 @@ export type AxisOptions<Scale, Value> = {
   lineWidth?: number;
 
   showTicks?: boolean;
-  ticks?: Value[] | ((scale: Scale) => Value[]);
+  ticks?: Value[] | ((scale: Scale) => Value[]) | number;
 
   tickLength?: number;
   tickWidth?: number;

@@ -54,6 +54,8 @@ function YAxis({
   useEffect(() => {
     const ticks = !_ticks
       ? scale.ticks()
+      : typeof _ticks === 'number'
+      ? scale.ticks(_ticks)
       : typeof _ticks === 'function'
       ? _ticks(scale)
       : _ticks;

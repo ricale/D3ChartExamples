@@ -32,14 +32,6 @@ function C05LineChartWithAnimScreen() {
           yAxisOptions={{ showGridLines: true, ticks: 4, animatable: false }}
           linesOptions={{ animatable: false }}
         />
-        <Text style={styles.subtitle}>애니메이션 컴포넌트가 많아서 느림</Text>
-        <LineChart
-          series={dummySeries}
-          width="100%"
-          height={200}
-          xAxisOptions={{ showGridLines: true }}
-          yAxisOptions={{ showGridLines: true }}
-        />
       </ScrollView>
     </ScreenContainer>
   );

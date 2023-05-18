@@ -27,21 +27,26 @@ function AnimatedPath({
       const interpolate = interpolater ?? d3InterpolatePath(prev, current);
       pathRef.current?.setNativeProps({ d: interpolate(delta) } as any);
     },
-    { initialValue: initialPrevD }
+    { initialValue: d }
   );
 
   useAnimWithDelta(
     visible,
     (_, current, delta) => {
+      const pathLength = pathRef.current?.getTotalLength() ?? 1;
       pathRef.current?.setNativeProps({
-        opacity: current ? delta : 1 - delta,
+        strokeDasharray: [pathLength, pathLength],
+        strokeDashoffset: pathLength * (current ? 1 - delta : -delta),
+        opacity: Math.min((current ? delta : 1 - delta) * 5, 1),
       } as any);
     },
     {
-      duration,
+      duration: duration * 1.5,
       initialValue: false,
       onFirst: () => {
-        pathRef.current?.setNativeProps({ opacity: 0 } as any);
+        pathRef.current?.setNativeProps({
+          opacity: 0,
+        } as any);
       },
     }
   );

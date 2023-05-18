@@ -23,13 +23,7 @@ function Lines({
       {series.map((sr, i) => (
         <Path
           key={i}
-          d={
-            sr.visible
-              ? lineFunc(sr.data) ?? undefined
-              : animatable
-              ? initialPrevD
-              : undefined
-          }
+          d={!sr.visible ? undefined : lineFunc(sr.data) ?? undefined}
           stroke={sr.color ?? colors[i % colors.length]}
           strokeLinecap="round"
           fill="transparent"

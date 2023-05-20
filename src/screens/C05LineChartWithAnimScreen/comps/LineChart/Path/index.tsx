@@ -4,24 +4,13 @@ import AnimatedPath, { AnimatedPathProps } from './AnimatedPath';
 export type PathProps = AnimatedPathProps & {
   animated?: boolean;
 };
-function Path({
-  animated,
-  initialPrevD,
-  duration,
-  interpolater,
-  ...props
-}: PathProps) {
+function Path({ animated, duration, interpolater, ...props }: PathProps) {
   if (animated === false) {
     return <RNSPath {...props} />;
   }
 
   return (
-    <AnimatedPath
-      initialPrevD={initialPrevD}
-      duration={duration}
-      interpolater={interpolater}
-      {...props}
-    />
+    <AnimatedPath duration={duration} interpolater={interpolater} {...props} />
   );
 }
 

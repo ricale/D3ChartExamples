@@ -3,19 +3,15 @@ import { Path, PathProps } from 'react-native-svg';
 import { interpolatePath as d3InterpolatePath } from 'd3-interpolate-path';
 import useAnimWithDelta from '../useAnimWithDelta';
 
-const INITIAL_PATH = 'M 0 0 Z';
-
 export type AnimatedPathProps = PathProps & {
-  initialPrevD?: string;
   duration?: number;
-  interpolater?: (delta: number) => string;
+  interpolater?: (prev: string, current: string) => (delta: number) => string;
   visible?: boolean;
 };
 function AnimatedPath({
   d,
   duration = 300,
-  initialPrevD = INITIAL_PATH,
-  interpolater,
+  interpolater = d3InterpolatePath,
   visible,
   ...props
 }: AnimatedPathProps) {
@@ -24,7 +20,7 @@ function AnimatedPath({
   useAnimWithDelta(
     d,
     (prev, current, delta) => {
-      const interpolate = interpolater ?? d3InterpolatePath(prev, current);
+      const interpolate = interpolater(prev, current);
       pathRef.current?.setNativeProps({ d: interpolate(delta) } as any);
     },
     { initialValue: d }
@@ -51,7 +47,7 @@ function AnimatedPath({
     }
   );
 
-  return <Path ref={pathRef} d={INITIAL_PATH} {...props} />;
+  return <Path ref={pathRef} {...props} />;
 }
 
 export default AnimatedPath;

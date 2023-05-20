@@ -39,6 +39,11 @@ function useAnimWithDelta<T>(
       return;
     }
 
+    if (prevValue === value) {
+      onChangeDelta(prevValue, value, 1);
+      return;
+    }
+
     const listener = (delta: number) => onChangeDelta(prevValue, value, delta);
 
     const listenerId = anim.addListener(({ value: delta }) => {

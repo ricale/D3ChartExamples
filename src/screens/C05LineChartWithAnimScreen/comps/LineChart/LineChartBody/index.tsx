@@ -42,19 +42,11 @@ function LineChartBody({
   linesOptions,
   selectionOptions,
 }: LineChartBodyProps) {
-  const initialPrevD =
-    `M ${paneBoundary.x1} ${paneBoundary.y1} ` +
-    `L ${paneBoundary.x2} ${paneBoundary.y1}`;
   return (
     <Fragment>
       <XAxis scale={xScale} paneBoundary={paneBoundary} {...xAxisOptions} />
       <YAxis scale={yScale} paneBoundary={paneBoundary} {...yAxisOptions} />
-      <Lines
-        series={series}
-        lineFunc={lineFunc}
-        initialPrevD={initialPrevD}
-        {...linesOptions}
-      />
+      <Lines series={series} lineFunc={lineFunc} {...linesOptions} />
       <Selection
         xScale={xScale}
         yScale={yScale}

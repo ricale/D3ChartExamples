@@ -8,12 +8,10 @@ import Path, { PathProps } from '../Path';
 type LinesProps = LinesOptions & {
   series: TimeSeries[];
   lineFunc: D3Line<TimeSeries['data'][0]>;
-  initialPrevD?: PathProps['initialPrevD'];
 };
 function Lines({
   series,
   lineFunc,
-  initialPrevD,
   colors = DEFAULT_COLORS,
   lineWidth = 1,
   animatable = true,
@@ -28,7 +26,6 @@ function Lines({
           strokeLinecap="round"
           fill="transparent"
           strokeWidth={sr.lineWidth ?? lineWidth}
-          initialPrevD={initialPrevD}
           visible={sr.visible}
           animated={animatable}
         />

@@ -4,6 +4,7 @@ import { Animated } from 'react-native';
 type UseSvgCompAnimOptions<T> = {
   initialValue?: T;
   onFirst?: (value: T) => void;
+  onEnd?: () => void;
   duration?: number;
 };
 type DeltaListener<T> = (
@@ -59,6 +60,7 @@ function useAnimWithDelta<T>(
     animated.start(() => {
       anim.removeListener(listenerId);
       anim.setValue(0);
+      options.onEnd?.();
     });
 
     return () => animated.stop();

@@ -40,8 +40,12 @@ function AnimatedPath({
       duration: duration * 1.5,
       initialValue: false,
       onFirst: () => {
+        pathRef.current?.setNativeProps({ opacity: 0 } as any);
+      },
+      onEnd: () => {
         pathRef.current?.setNativeProps({
-          opacity: 0,
+          strokeDasharray: null,
+          strokeDashoffset: 0,
         } as any);
       },
     }

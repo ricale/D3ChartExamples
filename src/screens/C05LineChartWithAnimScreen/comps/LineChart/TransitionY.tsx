@@ -9,7 +9,7 @@ type TransitionYProps = {
   visible?: boolean;
   duration?: number;
   onAnimY: OnAnimListener<number>;
-  onAnimVisible?: OnAnimListener<boolean>;
+  onAnimVisible: OnAnimListener<boolean>;
   children: ReactNode;
 };
 function TransitionY({
@@ -26,9 +26,7 @@ function TransitionY({
   useAnimWithDelta(
     y,
     (prev, current, delta) => {
-      gRef.current?.setNativeProps({
-        y: onAnimY(prev, current, delta),
-      });
+      gRef.current?.setNativeProps({ y: onAnimY(prev, current, delta) });
     },
     {
       duration,
@@ -41,9 +39,6 @@ function TransitionY({
   useAnimWithDelta(
     visible,
     (prev, current, delta) => {
-      if (!onAnimVisible) {
-        return;
-      }
       gRef.current?.setNativeProps({
         opacity: onAnimVisible(prev, current, delta),
       } as any);

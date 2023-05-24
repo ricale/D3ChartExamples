@@ -9,7 +9,7 @@ type TransitionXProps = {
   visible?: boolean;
   duration?: number;
   onAnimX: OnAnimListener<number>;
-  onAnimVisible?: OnAnimListener<boolean>;
+  onAnimVisible: OnAnimListener<boolean>;
   children: ReactNode;
 };
 function TransitionX({
@@ -26,9 +26,7 @@ function TransitionX({
   useAnimWithDelta(
     x,
     (prev, current, delta) => {
-      gRef.current?.setNativeProps({
-        x: onAnimX(prev, current, delta),
-      });
+      gRef.current?.setNativeProps({ x: onAnimX(prev, current, delta) });
     },
     {
       duration,
@@ -41,9 +39,6 @@ function TransitionX({
   useAnimWithDelta(
     visible,
     (prev, current, delta) => {
-      if (!onAnimVisible) {
-        return;
-      }
       gRef.current?.setNativeProps({
         opacity: onAnimVisible(prev, current, delta),
       } as any);

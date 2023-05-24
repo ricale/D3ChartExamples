@@ -15,6 +15,7 @@ function C04SelectableLineChartScreen() {
       </View>
 
       <ScrollView>
+        <Text style={styles.subtitle}>선택 시 점과 선만 보임</Text>
         <LineChart
           series={dummySeries}
           width="100%"
@@ -27,6 +28,7 @@ function C04SelectableLineChartScreen() {
           }}
         />
 
+        <Text style={styles.subtitle}>선택 시 점, 선, 툴팁 다 보임</Text>
         <LineChart
           series={dummySeries}
           width="100%"
@@ -34,6 +36,9 @@ function C04SelectableLineChartScreen() {
           xAxisOptions={{ showGridLines: true }}
         />
 
+        <Text style={styles.subtitle}>
+          선택 시 점과 툴팁만 보임. 툴팁은 디자인 수정됨.
+        </Text>
         <LineChart
           series={dummySeries}
           width="100%"

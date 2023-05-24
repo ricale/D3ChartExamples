@@ -21,6 +21,10 @@ const buttons: { title: string; screenName: keyof RootStackParamsList }[] = [
     title: 'C04 - 라인차트 특정 아이템 선택 기능',
     screenName: 'C04SelectableLineChart',
   },
+  {
+    title: 'C05 - 라인차트 애니메이션 기능',
+    screenName: 'C05LineChartWithAnim',
+  },
 ];
 
 function HomeScreen() {
